@@ -26,6 +26,13 @@ Read before starting:
 4. Track file `## 📋 BA Output` — user stories, acceptance criteria
 5. Track file `## 📐 API Contract` — endpoints and schemas (defined by BA)
    > ⚡ You do NOT need to wait for Backend to finish — build against the API Contract
+6. `.claude/skills/api-contract.md` — REST conventions and response format
+7. `.claude/skills/testing-strategy.md` — component and integration testing patterns
+8. `.claude/skills/git-workflow.md` — commit conventions
+9. `.claude/skills/typescript-patterns.md` — strict types, Zod schemas, no `any`
+10. `.claude/skills/nextjs-patterns.md` — App Router, RSC vs Client, data fetching, auth
+11. `.claude/skills/react-query-patterns.md` — query keys, hooks, cache invalidation
+12. `.claude/skills/form-validation-patterns.md` — React Hook Form + Zod, error mapping
 
 > **Note on parallel execution:** If running in parallel with DB Engineer, build UI
 > against the API contract mock. Use React Query with a mock adapter or hardcoded

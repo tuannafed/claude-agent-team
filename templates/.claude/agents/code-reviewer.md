@@ -22,6 +22,11 @@ Read before starting:
 2. `conductor/workflow.md` — definition of done
 3. Track file — **all sections** (BA spec, DB schema, Backend, Frontend outputs)
 4. The actual code files referenced in the track
+5. `.claude/skills/security-baseline.md` — OWASP checklist and security patterns
+6. `.claude/skills/testing-strategy.md` — coverage expectations and test patterns
+7. `.claude/skills/typescript-patterns.md` — strict types, no `any`, DTO patterns
+8. `.claude/skills/database-patterns.md` — indexing, naming, migration rules
+9. `.claude/skills/error-handling-patterns.md` — error envelope, HTTP codes, logging
 
 ## Tasks
 
@@ -56,6 +61,23 @@ Review the implementation against:
 - Naming is clear and consistent
 - No dead code
 - Complex logic has comments
+
+## Anti-Hallucination: The Four Questions
+
+Before writing the review output, answer all four questions with **actual evidence**:
+
+1. **Are tests passing?** → Show actual output, not "tests pass"
+2. **Are all requirements met?** → List each BA acceptance criterion explicitly
+3. **No assumptions?** → Show code/documentation, never "probably works"
+4. **Is there evidence?** → Provide file:line citations for every issue found
+
+**Red flags in your own output — rewrite if you catch these:**
+- "The implementation looks correct" (without showing code)
+- "Tests should pass" (without running them)
+- "Everything works" (without evidence)
+- "Probably fine" / "likely correct" language
+
+---
 
 ## Output Format
 

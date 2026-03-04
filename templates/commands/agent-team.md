@@ -59,25 +59,46 @@ You are acting as the **BA Agent**.
 2. Read `conductor/product.md` for product context
 3. Read `conductor/workflow.md` for team rules
 4. Read `conductor/knowledge.md` for accumulated lessons
-5. **Assess your confidence** in understanding the requirements:
+5. Read `conductor/tracks.md` to find the next available track number
+6. **Detect track type** — classify as `feature | bug | chore | refactor`
+7. **Assess your confidence** in understanding the requirements:
    - ≥ 90%: proceed directly
    - 70–89%: present 2-3 interpretations, ask user to pick one
    - < 70%: list open questions, do NOT write spec until answered
-6. Create a new track file in `conductor/tracks/` with the next available number
-   - Format: `conductor/tracks/track-NNN-<slug>.md`
-   - Copy structure from `conductor/tracks/` (look at existing tracks for format, or use the standard template)
-7. Fill in the `## 📋 BA Output` section based on the feature description
-8. Fill in the `## 📐 API Contract` section — this is REQUIRED to enable parallel execution
-9. Set status to `in-progress`, phase to `ba`
-10. Report:
+8. Create a new track file: `conductor/tracks/track-NNN-<slug>.md`
+9. Fill in the spec section based on **track type**:
+   - `feature` → `## 📋 BA Output` + `## 📐 API Contract` (required for parallel)
+   - `bug` → `## 📋 BA Output — Bug Report` only
+   - `chore`/`refactor` → `## 📋 BA Output — Chore/Refactor Spec` only
+10. Set status to `in-progress`, phase to `ba`
+11. Register in `conductor/tracks.md`
+12. Report:
 ```
+Type: [feature|bug|chore|refactor]
 Confidence: X%
 
 ✅ Track created: conductor/tracks/track-NNN-<slug>.md
+   Registered in: conductor/tracks.md
 
 Next options:
+```
+
+**For feature:**
+```
   ⚡ Parallel (recommended): /agent-team parallel db frontend track-NNN
-  📦 Sequential:             /agent-team db track-NNN
+  📦 Sequential DB first:    /agent-team db track-NNN
+```
+
+**For bug:**
+```
+  🔧 Backend fix:  /agent-team backend track-NNN
+  🎨 Frontend fix: /agent-team frontend track-NNN
+```
+
+**For chore/refactor:**
+```
+  ⚙️  Backend:  /agent-team backend track-NNN
+  🎨 Frontend: /agent-team frontend track-NNN
 ```
 
 ---
@@ -217,13 +238,20 @@ What would you like to do?
 
 Show a summary of all tracks:
 
-1. List all files in `conductor/tracks/`
-2. Read each file's `## Status` section
-3. Output a table:
+1. Read `conductor/tracks.md` directly
+2. Display the table as-is, then annotate each in-progress track with its next step:
 
 ```
-Track ID                        | Status       | Phase      | Next Step
-track-001-auth                  | in-progress  | backend    | /agent-team frontend track-001
-track-002-dashboard             | pending      | —          | /agent-team init
-track-003-notifications         | done         | —          | —
+📋 Agent Team — Track Status
+
+| Status | ID                      | Title              | Type    | Phase    | Updated    |
+|--------|-------------------------|--------------------|---------|----------|------------|
+| [~]    | track-001-auth          | User Auth          | feature | backend  | 2025-01-15 |
+| [x]    | track-002-dashboard     | Admin Dashboard    | feature | done     | 2025-01-14 |
+| [ ]    | track-003-notifications | Push Notifications | feature | pending  | 2025-01-16 |
+
+Legend: [ ] pending  [~] in-progress  [x] done
+
+Suggested next steps:
+  track-001-auth  → /agent-team frontend track-001
 ```

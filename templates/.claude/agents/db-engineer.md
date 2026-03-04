@@ -23,6 +23,7 @@ Read before starting:
 2. `conductor/tech-stack.md` — existing schema conventions, naming rules
 3. `conductor/knowledge.md` — accumulated DB lessons (if exists)
 4. Track file `## 📋 BA Output` section — the feature spec
+5. `.claude/skills/database-patterns.md` — naming conventions, indexing, migration patterns
 
 ## Tasks
 

@@ -47,6 +47,23 @@ Review the implementation against:
 - No dead code
 - Complex logic has comments
 
+## Anti-Hallucination: The Four Questions
+
+Before writing the review output, answer all four questions with **actual evidence**:
+
+1. **Are tests passing?** → Show actual output, not "tests pass"
+2. **Are all requirements met?** → List each BA acceptance criterion explicitly
+3. **No assumptions?** → Show code/documentation, never "probably works"
+4. **Is there evidence?** → Provide file:line citations for every issue found
+
+**Red flags in your own output — rewrite if you catch these:**
+- "The implementation looks correct" (without showing code)
+- "Tests should pass" (without running them)
+- "Everything works" (without evidence)
+- "Probably fine" / "likely correct" language
+
+---
+
 ## Output Format
 
 Write into `## 🔍 Code Review` section of the track file.

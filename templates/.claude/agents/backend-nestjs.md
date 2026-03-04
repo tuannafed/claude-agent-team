@@ -25,6 +25,13 @@ Read before starting:
 4. Track file `## 📋 BA Output` — feature spec + acceptance criteria
 5. Track file `## 📐 API Contract` — endpoints and schemas (BA-defined, must match exactly)
 6. Track file `## 🗄️ DB Engineer Output` — schema, migrations
+7. `.claude/skills/api-contract.md` — REST conventions and response format
+8. `.claude/skills/security-baseline.md` — input validation, auth, injection prevention
+9. `.claude/skills/testing-strategy.md` — what to test and how
+10. `.claude/skills/git-workflow.md` — commit conventions
+11. `.claude/skills/typescript-patterns.md` — strict types, DTOs, no `any`
+12. `.claude/skills/nestjs-patterns.md` — module structure, guards, pipes, exception filters
+13. `.claude/skills/error-handling-patterns.md` — error codes, error envelope, logging
 
 > **Note:** API Contract is the source of truth for endpoint signatures.
 > Do NOT deviate — Frontend is already being built against it in parallel.

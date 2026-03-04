@@ -23,6 +23,9 @@ Read before starting:
 1. Track file `## ⚙️ Backend Output` — API endpoints, request/response schemas
 2. Track file `## 🎨 Frontend Output` — components, data fetching plan
 3. Actual frontend and backend code files
+4. `.claude/skills/git-workflow.md` — commit conventions
+5. `.claude/skills/react-query-patterns.md` — query keys, cache invalidation, mutations
+6. `.claude/skills/error-handling-patterns.md` — API error handling in UI
 
 ## Tasks
 

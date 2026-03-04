@@ -1,8 +1,10 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Usage: ./init-new-project.sh <project-path> --type <team-type> [--name <project-name>]
+# Usage: ./init-new-project.sh <project-path> --type <team-type> [--name <project-name>] [--chrome-ext] [--ai]
 # Types: fullstack-web | api-only | ai-llm-app | chrome-extension
+# Flags: --chrome-ext  also copies chrome-extension domain skills
+#        --ai          also copies AI/RAG domain skills
 
 TEMPLATE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/templates"
 
@@ -10,11 +12,15 @@ TEMPLATE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/templates"
 PROJECT_PATH=""
 TEAM_TYPE="fullstack-web"
 PROJECT_NAME=""
+INCLUDE_CHROME_EXT=false
+INCLUDE_AI=false
 
 while [[ $# -gt 0 ]]; do
   case $1 in
     --type) TEAM_TYPE="$2"; shift 2 ;;
     --name) PROJECT_NAME="$2"; shift 2 ;;
+    --chrome-ext) INCLUDE_CHROME_EXT=true; shift ;;
+    --ai) INCLUDE_AI=true; shift ;;
     -*) echo "Unknown flag: $1"; exit 1 ;;
     *) PROJECT_PATH="$1"; shift ;;
   esac
@@ -44,7 +50,7 @@ echo "📁 Creating conductor/ structure..."
 mkdir -p "$PROJECT_PATH/conductor/tracks"
 
 # Copy conductor templates
-for template in product.md tech-stack.md workflow.md knowledge.md; do
+for template in product.md tech-stack.md workflow.md knowledge.md tracks.md; do
   if [[ ! -f "$PROJECT_PATH/conductor/$template" ]]; then
     cp "$TEMPLATE_DIR/conductor/$template" "$PROJECT_PATH/conductor/$template"
     # Replace placeholder
@@ -93,13 +99,15 @@ echo "🔧 Setting up .claude/ (commands + agents)..."
 mkdir -p "$PROJECT_PATH/.claude/commands"
 mkdir -p "$PROJECT_PATH/.claude/agents"
 
-# Copy agent-team command
-if [[ ! -f "$PROJECT_PATH/.claude/commands/agent-team.md" ]]; then
-  cp "$TEMPLATE_DIR/commands/agent-team.md" "$PROJECT_PATH/.claude/commands/agent-team.md"
-  echo "   ✅ .claude/commands/agent-team.md"
-else
-  echo "   ⏭️  .claude/commands/agent-team.md (already exists)"
-fi
+# Copy commands
+for cmd in agent-team checkpoint learn; do
+  if [[ ! -f "$PROJECT_PATH/.claude/commands/$cmd.md" ]]; then
+    cp "$TEMPLATE_DIR/commands/$cmd.md" "$PROJECT_PATH/.claude/commands/$cmd.md"
+    echo "   ✅ .claude/commands/$cmd.md"
+  else
+    echo "   ⏭️  .claude/commands/$cmd.md (already exists)"
+  fi
+done
 
 # Copy settings.json (hooks)
 if [[ ! -f "$PROJECT_PATH/.claude/settings.json" ]]; then
@@ -108,6 +116,46 @@ if [[ ! -f "$PROJECT_PATH/.claude/settings.json" ]]; then
 else
   echo "   ⏭️  .claude/settings.json (already exists)"
 fi
+
+# Copy skills
+mkdir -p "$PROJECT_PATH/.claude/skills"
+
+# Core skills — always copied
+CORE_SKILLS="api-contract security-baseline testing-strategy git-workflow"
+
+# Framework skills — copied for all standard project types
+FRAMEWORK_SKILLS="typescript-patterns database-patterns nextjs-patterns nestjs-patterns react-query-patterns fastapi-patterns"
+
+# Quality skills — always copied
+QUALITY_SKILLS="error-handling-patterns form-validation-patterns"
+
+ALL_SKILLS="$CORE_SKILLS $FRAMEWORK_SKILLS $QUALITY_SKILLS"
+
+# Domain skills — copied only when relevant flag is set
+if [[ "$INCLUDE_CHROME_EXT" == true ]]; then
+  ALL_SKILLS="$ALL_SKILLS chrome-extension-mv3"
+fi
+if [[ "$INCLUDE_AI" == true ]]; then
+  ALL_SKILLS="$ALL_SKILLS prompt-engineering rag-architecture"
+fi
+
+cp "$TEMPLATE_DIR/.claude/skills/MANIFEST.md" "$PROJECT_PATH/.claude/skills/MANIFEST.md"
+echo "   ✅ .claude/skills/MANIFEST.md"
+
+for skill in $ALL_SKILLS; do
+  SRC="$TEMPLATE_DIR/.claude/skills/$skill.md"
+  DEST="$PROJECT_PATH/.claude/skills/$skill.md"
+  if [[ -f "$SRC" ]]; then
+    if [[ ! -f "$DEST" ]]; then
+      cp "$SRC" "$DEST"
+      echo "   ✅ .claude/skills/$skill.md"
+    else
+      echo "   ⏭️  .claude/skills/$skill.md (already exists)"
+    fi
+  else
+    echo "   ⚠️  Skill template not found: $skill.md (skipped)"
+  fi
+done
 
 # Copy native agent files (YAML frontmatter format — auto-detected by Claude Code)
 # Select agents based on team type
