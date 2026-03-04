@@ -1,0 +1,32 @@
+{
+  "env": {
+    "CLAUDE_AUTOCOMPACT_PCT_OVERRIDE": "80"
+  },
+  "permissions": {
+    "allow": [
+      "Read(**)",
+      "Write(conductor/**)",
+      "Edit(conductor/**)"
+    ],
+    "ask": [
+      "Write(src/**)",
+      "Edit(src/**)",
+      "Write(app/**)",
+      "Edit(app/**)",
+      "Bash(git *)"
+    ]
+  },
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo '\\n📋 Agent Team Status — run /agent-team status to see all tracks'"
+          }
+        ]
+      }
+    ]
+  }
+}

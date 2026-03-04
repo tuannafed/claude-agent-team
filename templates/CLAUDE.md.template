@@ -1,0 +1,71 @@
+# Project: {{PROJECT_NAME}}
+
+## Agent Team Configuration
+
+**Team type:** {{TEAM_TYPE}}
+<!-- Options: fullstack-web | api-only | ai-llm-app | chrome-extension | custom -->
+
+**Agent pipeline:**
+<!-- fullstack-web:    BA → DB Engineer → Backend → Frontend → Integrator → Reviewer -->
+<!-- api-only:         BA → DB Engineer → Backend → API Designer → Reviewer -->
+<!-- ai-llm-app:       BA → Backend → AI Engineer → Frontend → Reviewer -->
+<!-- chrome-extension: BA → Frontend → Chrome Ext Dev → Reviewer -->
+{{AGENT_PIPELINE}}
+
+**Team config:** `conductor/team-config.md`
+
+---
+
+## Project Context
+
+**Description:** {{PROJECT_DESCRIPTION}}
+
+**Stack:**
+- Frontend: {{FRONTEND_STACK}}
+- Backend: {{BACKEND_STACK}}
+- Database: {{DATABASE}}
+- Auth: {{AUTH_SOLUTION}}
+- Deployment: {{DEPLOYMENT}}
+
+**Current phase:** {{CURRENT_PHASE}}
+<!-- Options: planning | development | testing | review | production -->
+
+**Key constraints:**
+- {{CONSTRAINT_1}}
+
+---
+
+## Conductor Context
+
+- Product definition: `conductor/product.md`
+- Tech stack decisions: `conductor/tech-stack.md`
+- Dev workflow rules: `conductor/workflow.md`
+- Active tracks: `conductor/tracks/`
+
+---
+
+## Workflow Rules
+
+1. Before starting any task, check `conductor/tracks/` for existing work
+2. Each agent writes output to their section in the track file
+3. Do not skip phases — each agent's output is the next agent's input
+4. Mark track status: `pending → in-progress → review → done`
+5. Code review required before `done`
+
+---
+
+## Agent Activation Guide
+
+| Trigger | Command | Agent | Model |
+|---------|---------|-------|-------|
+| New feature/bug | `/agent-team init "<description>"` | BA | Opus (critical) |
+| Schema work | `/agent-team db <track-id>` | DB Engineer | Sonnet |
+| API/backend work | `/agent-team backend <track-id>` | Backend Dev | Sonnet |
+| UI/frontend work | `/agent-team frontend <track-id>` | Frontend Dev | Sonnet |
+| AI integration | `/agent-team ai <track-id>` | AI Engineer | Sonnet |
+| Parallel (DB + FE) | `/agent-team parallel db frontend <track-id>` | Both | Sonnet |
+| Review | `/agent-team review <track-id>` | Code Reviewer | Opus (critical) |
+| Status check | `/agent-team status` | — | — |
+
+**Native agents:** `.claude/agents/` — auto-detected by Claude Code, no manual paste needed
+**Accumulated knowledge:** `conductor/knowledge.md` — lessons learned across tracks
