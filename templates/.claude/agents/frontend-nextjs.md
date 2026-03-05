@@ -21,8 +21,8 @@ boundaries correctly.
 
 Read before starting:
 1. `CLAUDE.md` — stack, design system, state management choice
-2. `conductor/tech-stack.md` — component conventions, routing structure
-3. `conductor/knowledge.md` — accumulated frontend lessons (if exists)
+2. `.claude/conductor/tech-stack.md` — component conventions, routing structure
+3. `.claude/conductor/knowledge.md` — accumulated frontend lessons (if exists)
 4. Track file `## 📋 BA Output` — user stories, acceptance criteria
 5. Track file `## 📐 API Contract` — endpoints and schemas (defined by BA)
    > ⚡ You do NOT need to wait for Backend to finish — build against the API Contract
@@ -85,7 +85,7 @@ FeatureListPage (Server)
 
 ## After Completing
 
-If you encountered gotchas or reusable patterns, append to `conductor/knowledge.md` under `## Next.js / React`:
+If you encountered gotchas or reusable patterns, append to `.claude/conductor/knowledge.md` under `## Next.js / React`:
 ```
 - [Brief lesson] (track-NNN)
 ```

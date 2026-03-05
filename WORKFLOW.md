@@ -33,7 +33,7 @@
         │                                                    │
         │  reads:  CLAUDE.md, product.md, workflow.md        │
         │          knowledge.md                              │
-        │  writes: conductor/tracks/track-001-auth.md        │
+        │  writes: .claude/conductor/tracks/track-001-auth.md        │
         │          ├── ## 📋 BA Output (spec + stories)      │
         │          └── ## 📐 API Contract  ← unlock key      │
         └────────────────────────┬───────────────────────────┘
@@ -213,11 +213,11 @@
 
 ## Track File as Shared State
 
-The track file `conductor/tracks/track-NNN-slug.md` is the single source of truth —
+The track file `.claude/conductor/tracks/track-NNN-slug.md` is the single source of truth —
 each agent reads from it and writes into its own section:
 
 ```
-conductor/tracks/track-001-auth.md
+.claude/conductor/tracks/track-001-auth.md
 │
 ├── ## Status          ← updated by each agent (current phase + next step)
 ├── ## 📋 BA Output    ← written by ba-agent
@@ -228,6 +228,196 @@ conductor/tracks/track-001-auth.md
 ├── ## 🔗 Integrator Output ← written by integrator
 └── ## 🔍 Code Review  ← written by code-reviewer
 ```
+
+---
+
+---
+
+## Case 3 — New Feature (Decision Flow)
+
+> Quick guide: pick the right pipeline based on feature scope.
+
+```
+          Start: "I need to build a new feature"
+                        │
+                        ▼
+        ┌───────────────────────────────┐
+        │  Does it need new DB tables?  │
+        └───────────────────────────────┘
+               │              │
+              Yes              No
+               │              │
+               ▼              ▼
+    Run full pipeline    Skip DB step
+    (Case 1 or Case 2)   (BA → Backend → Frontend → Review)
+```
+
+### Step-by-Step: New Feature
+
+```
+Step 1  /agent-team init "feature name"
+        → ba-agent writes spec + API contract
+        → Review output, confirm scope before proceeding
+
+Step 2  Choose pipeline:
+
+        SIMPLE (no DB change)
+        ─────────────────────────────────────────────────
+        /agent-team backend track-NNN   → implement API
+        /agent-team frontend track-NNN  → build UI
+        /agent-team review track-NNN    → final gate
+
+        STANDARD (with DB schema)
+        ─────────────────────────────────────────────────
+        /agent-team db track-NNN        → schema + migration
+        /agent-team backend track-NNN   → implement API
+        /agent-team frontend track-NNN  → build UI
+        /agent-team integrate track-NNN → wire frontend ↔ backend
+        /agent-team review track-NNN    → final gate
+
+        PARALLEL ⚡ (recommended for medium/large)
+        ─────────────────────────────────────────────────
+        /agent-team parallel db frontend track-NNN
+        ↓ (both complete)
+        /agent-team backend track-NNN
+        /agent-team integrate track-NNN
+        /agent-team review track-NNN
+```
+
+**Which agents to run by feature type:**
+
+| Feature type | Agents needed |
+|---|---|
+| Simple API endpoint | BA → Backend → Review |
+| Frontend-only UI | BA → Frontend → Review |
+| Full-stack CRUD | BA → DB → Backend → Frontend → Integrate → Review |
+| AI/LLM feature | BA → Backend → AI Engineer → Frontend → Review |
+| Chrome Extension | BA → Frontend → Chrome Ext → Review |
+
+---
+
+## Case 4 — Bug Fix
+
+> Skip BA + DB when possible. Only run affected layers.
+
+```
+        Start: "There's a bug in X"
+                     │
+                     ▼
+        ┌──────────────────────────────────┐
+        │  Which layer is broken?          │
+        └──────────────────────────────────┘
+          │           │           │
+       DB only    Backend only  Frontend only
+          │           │           │
+          ▼           ▼           ▼
+      /agent-team  /agent-team  /agent-team
+      db track-NNN backend NNN  frontend NNN
+          │           │           │
+          └─────┬─────┘           │
+                │                 │
+                ▼                 ▼
+        /agent-team review track-NNN   ← always required
+```
+
+### Bug Fix Flow
+
+```
+Step 1  Create a minimal track:
+        /agent-team init "fix: <what is broken>"
+        → ba-agent writes a SHORT spec (bug description + expected vs actual)
+        → Skip full API contract if no endpoint changes
+
+Step 2  Run ONLY the affected agents:
+
+        BUG in DB (wrong schema, index, migration)
+        ──────────────────────────────────────────
+        /agent-team db track-NNN
+        /agent-team review track-NNN
+
+        BUG in Backend (wrong logic, missing validation, auth issue)
+        ─────────────────────────────────────────────────────────────
+        /agent-team backend track-NNN
+        /agent-team review track-NNN
+
+        BUG in Frontend (UI, state, API call)
+        ─────────────────────────────────────────────────────────────
+        /agent-team frontend track-NNN
+        /agent-team review track-NNN
+
+        BUG spans Backend + Frontend (contract mismatch, wiring)
+        ─────────────────────────────────────────────────────────────
+        /agent-team backend track-NNN
+        /agent-team integrate track-NNN
+        /agent-team review track-NNN
+
+Step 3  Branch naming: fix/track-NNN-<bug-slug>
+        Commit: fix(track-NNN): <what was wrong>
+```
+
+**Checklist before marking bug fixed:**
+- [ ] Root cause identified and fixed (not just symptom)
+- [ ] Regression test added
+- [ ] `/agent-team review` approved
+- [ ] Track status → `done`
+
+---
+
+## Case 5 — Daily Work Guide
+
+> How to start each day and maintain momentum.
+
+### Morning Routine (5 min)
+
+```
+1. Check track status
+   /agent-team status
+   → lists all tracks with current phase + last updated
+
+2. Pick up where you left off
+   /agent-team resume track-NNN
+   → reads track file, summarizes current state + next step
+
+3. Check for blocked tracks
+   → Look for tracks with status = "blocked"
+   → Resolve the blocker before starting new work
+```
+
+### During the Day
+
+```
+Starting a task:
+   Read the track file first
+   → .claude/conductor/tracks/track-NNN-slug.md
+   → Check "## Current Phase" and "## Next Step"
+
+After each agent run:
+   → Review the agent's output section
+   → If something looks wrong, fix before calling next agent
+   → Do NOT chain all agents blindly — review each step
+
+When you learn something new:
+   /learn "lesson about X"
+   → Adds to .claude/conductor/knowledge.md
+   → Future agents will read this and avoid the same mistake
+```
+
+### End of Day Checklist
+
+```
+[ ] Track file updated with current phase
+[ ] Uncommitted changes staged (git add) or noted
+[ ] Blocked reasons documented in track file
+[ ] Tomorrow's next step written in "## Next Step"
+```
+
+### Weekly Rhythm
+
+| Day | Focus |
+|-----|-------|
+| Mon | Review open tracks, plan the week |
+| Tue–Thu | Feature development (init → agents → review) |
+| Fri | Code review + mark tracks done + update knowledge.md |
 
 ---
 

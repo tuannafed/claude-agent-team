@@ -33,7 +33,7 @@ echo "   Type: $TEAM_TYPE"
 echo "   Path: $PROJECT_PATH"
 echo ""
 echo "⚠️  This will NOT modify existing source code."
-echo "   It only adds: CLAUDE.md, conductor/, .claude/commands/"
+echo "   It only adds: CLAUDE.md, .claude/conductor/, .claude/commands/"
 echo ""
 read -p "Continue? [y/N] " confirm
 [[ "$confirm" =~ ^[Yy]$ ]] || { echo "Aborted."; exit 0; }
@@ -70,7 +70,7 @@ fi
 
 if [[ -n "$DETECTED" ]]; then
   echo "   Detected stack hints:$DETECTED"
-  echo "   Please update conductor/tech-stack.md with actual details."
+  echo "   Please update .claude/conductor/tech-stack.md with actual details."
 fi
 
 echo ""
@@ -79,6 +79,6 @@ echo ""
 echo "Next steps:"
 echo "  1. Open $PROJECT_PATH in Claude Code"
 echo "  2. Update CLAUDE.md with project details"
-echo "  3. Update conductor/product.md — describe what this project does"
-echo "  4. Update conductor/tech-stack.md — document actual tech decisions"
+echo "  3. Update .claude/conductor/product.md — describe what this project does"
+echo "  4. Update .claude/conductor/tech-stack.md — document actual tech decisions"
 echo "  5. Create your first track: /agent-team init \"feature to work on\""

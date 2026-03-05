@@ -21,7 +21,7 @@ developer-friendly and follows REST conventions.
 
 Read before starting:
 1. Track file `## ⚙️ Backend Output` — endpoints, DTOs, response shapes
-2. `conductor/tech-stack.md` — API versioning strategy
+2. `.claude/conductor/tech-stack.md` — API versioning strategy
 3. Actual backend controller/router files
 
 ## Tasks

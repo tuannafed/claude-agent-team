@@ -43,10 +43,10 @@ State explicitly: `Confidence: X%`
 ## Step 3 — Read Context
 
 1. `CLAUDE.md` — project context, stack, constraints
-2. `conductor/product.md` — product vision and user personas
-3. `conductor/workflow.md` — team rules and definition of done
-4. `conductor/knowledge.md` — accumulated lessons (if exists)
-5. `conductor/tracks.md` — existing tracks (to assign next track number)
+2. `.claude/conductor/product.md` — product vision and user personas
+3. `.claude/conductor/workflow.md` — team rules and definition of done
+4. `.claude/conductor/knowledge.md` — accumulated lessons (if exists)
+5. `.claude/conductor/tracks.md` — existing tracks (to assign next track number)
 6. `.claude/skills/api-contract.md` — REST conventions and response format (for `feature` tracks)
 
 ## Step 4 — Write Spec
@@ -175,8 +175,8 @@ Yes / No — [brief reason]
 
 ## Step 5 — Create Track File
 
-Create `conductor/tracks/track-NNN-<slug>.md`:
-- Determine NNN by reading `conductor/tracks.md` to find the next available number
+Create `.claude/conductor/tracks/track-NNN-<slug>.md`:
+- Determine NNN by reading `.claude/conductor/tracks.md` to find the next available number
 - slug: 2-4 words from title, lowercase, hyphen-separated
 
 Set the header:
@@ -191,7 +191,7 @@ Set the header:
 
 ## Step 6 — Register in tracks.md
 
-Append a row to `conductor/tracks.md`:
+Append a row to `.claude/conductor/tracks.md`:
 
 ```markdown
 | [~] | track-NNN-slug | [Title] | feature | ba | YYYY-MM-DD | YYYY-MM-DD |
@@ -203,8 +203,8 @@ Append a row to `conductor/tracks.md`:
 Type: [feature|bug|chore|refactor]
 Confidence: X%
 
-✅ Track created: conductor/tracks/track-NNN-slug.md
-   Registered in: conductor/tracks.md
+✅ Track created: .claude/conductor/tracks/track-NNN-slug.md
+   Registered in: .claude/conductor/tracks.md
 
 Next options:
 ```
@@ -236,4 +236,4 @@ Next options:
 - Each acceptance criterion must be independently verifiable
 - Do not make technology decisions — that's for the engineering agents
 - For bug tracks: hypothesis about cause is helpful, but don't over-specify the fix
-- Always register in `conductor/tracks.md` after creating the track file
+- Always register in `.claude/conductor/tracks.md` after creating the track file

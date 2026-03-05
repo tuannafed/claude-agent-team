@@ -1,5 +1,5 @@
 ---
-description: Extract reusable patterns from the current session and save to conductor/knowledge.md
+description: Extract reusable patterns from the current session and save to .claude/conductor/knowledge.md
 ---
 
 # /learn — Extract Session Patterns
@@ -22,12 +22,12 @@ After solving a non-trivial problem — a tricky debugging session, an architect
 1. Review the current session for the most valuable insight
 2. Draft a pattern entry using the format below
 3. **Confirm with user before writing anything to disk**
-4. Append to `conductor/knowledge.md` under a `## Learned` section:
+4. Append to `.claude/conductor/knowledge.md` under a `## Learned` section:
    ```
    ## Learned — <YYYY-MM-DD>: <Pattern Name>
    ...
    ```
-   Or save as a standalone note: `conductor/notes/<date>-<slug>.md`
+   Or save as a standalone note: `.claude/conductor/notes/<date>-<slug>.md`
 
 ## Output Format
 
@@ -51,7 +51,7 @@ After solving a non-trivial problem — a tricky debugging session, an architect
 - Don't extract trivial fixes (typos, obvious syntax errors, one-off API outages)
 - One pattern per entry — keep it focused
 - Confirm with user before writing to disk
-- If the pattern is project-specific, save to `conductor/knowledge.md`
+- If the pattern is project-specific, save to `.claude/conductor/knowledge.md`
 - If it's general (a language/framework trick), still save locally — the user can promote it later
 
 ## Arguments

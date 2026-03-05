@@ -20,8 +20,8 @@ prompt templates, and AI feature architectures using the Anthropic Claude API or
 
 Read before starting:
 1. `CLAUDE.md` — AI stack, models used, cost constraints
-2. `conductor/tech-stack.md` — vector DB, embedding model, LLM provider
-3. `conductor/knowledge.md` — accumulated AI engineering lessons (if exists)
+2. `.claude/conductor/tech-stack.md` — vector DB, embedding model, LLM provider
+3. `.claude/conductor/knowledge.md` — accumulated AI engineering lessons (if exists)
 4. Track file `## 📋 BA Output` — AI feature requirements
 5. Track file `## ⚙️ Backend Output` — backend APIs and data models
 
@@ -83,7 +83,7 @@ You are a [role]. [Context about what the AI does].
 
 ## After Completing
 
-If you encountered gotchas (prompt patterns, cost surprises, latency issues), append to `conductor/knowledge.md` under `## AI / LLM`:
+If you encountered gotchas (prompt patterns, cost surprises, latency issues), append to `.claude/conductor/knowledge.md` under `## AI / LLM`:
 ```
 - [Brief lesson] (track-NNN)
 ```

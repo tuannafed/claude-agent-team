@@ -12,7 +12,7 @@
 <!-- chrome-extension: BA → Frontend → Chrome Ext Dev → Reviewer -->
 {{AGENT_PIPELINE}}
 
-**Team config:** `conductor/team-config.md`
+**Team config:** `.claude/conductor/team-config.md`
 
 ---
 
@@ -37,16 +37,16 @@
 
 ## Conductor Context
 
-- Product definition: `conductor/product.md`
-- Tech stack decisions: `conductor/tech-stack.md`
-- Dev workflow rules: `conductor/workflow.md`
-- Active tracks: `conductor/tracks/`
+- Product definition: `.claude/conductor/product.md`
+- Tech stack decisions: `.claude/conductor/tech-stack.md`
+- Dev workflow rules: `.claude/conductor/workflow.md`
+- Active tracks: `.claude/conductor/tracks/`
 
 ---
 
 ## Workflow Rules
 
-1. Before starting any task, check `conductor/tracks/` for existing work
+1. Before starting any task, check `.claude/conductor/tracks/` for existing work
 2. Each agent writes output to their section in the track file
 3. Do not skip phases — each agent's output is the next agent's input
 4. Mark track status: `pending → in-progress → review → done`
@@ -68,4 +68,4 @@
 | Status check | `/agent-team status` | — | — |
 
 **Native agents:** `.claude/agents/` — auto-detected by Claude Code, no manual paste needed
-**Accumulated knowledge:** `conductor/knowledge.md` — lessons learned across tracks
+**Accumulated knowledge:** `.claude/conductor/knowledge.md` — lessons learned across tracks

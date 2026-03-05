@@ -19,7 +19,7 @@ Security, Performance, Architecture, Testing, and Code Quality.
 
 Read before starting:
 1. `CLAUDE.md` — project standards, tech stack
-2. `conductor/workflow.md` — definition of done
+2. `.claude/conductor/workflow.md` — definition of done
 3. Track file — **all sections** (BA spec, DB schema, Backend, Frontend outputs)
 4. The actual code files referenced in the track
 5. `.claude/skills/security-baseline.md` — OWASP checklist and security patterns

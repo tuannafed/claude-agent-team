@@ -20,7 +20,7 @@ Create a named checkpoint in the current track, or verify progress against one.
    ```bash
    git add -A && git commit -m "checkpoint: <name>"
    ```
-2. Record in `conductor/checkpoints.log`:
+2. Record in `.claude/conductor/checkpoints.log`:
    ```
    <ISO-date> | <name> | <git-short-sha> | <current-track>
    ```
@@ -39,7 +39,7 @@ Create a named checkpoint in the current track, or verify progress against one.
 
 Compare current state to a previous checkpoint:
 
-1. Read the SHA from `conductor/checkpoints.log`
+1. Read the SHA from `.claude/conductor/checkpoints.log`
 2. Run `git diff <sha>..HEAD --stat`
 3. Run tests and note pass/fail
 4. Report:
@@ -59,7 +59,7 @@ Compare current state to a previous checkpoint:
 
 `/checkpoint list`
 
-Read `conductor/checkpoints.log` and display as a table:
+Read `.claude/conductor/checkpoints.log` and display as a table:
 
 ```
 Name              SHA      Date        Track
@@ -87,4 +87,4 @@ Ready for PR    → /checkpoint verify "track-start"
 $ARGUMENTS:
 - `create <name>` — Create named checkpoint (git commit + log entry)
 - `verify <name>` — Compare current state to checkpoint
-- `list`          — Show all checkpoints in `conductor/checkpoints.log`
+- `list`          — Show all checkpoints in `.claude/conductor/checkpoints.log`

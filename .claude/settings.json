@@ -1,0 +1,20 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(chmod +x /Users/tuanna/Projects/AI/claude-agent-team/setup.sh)",
+      "Bash(chmod +x /Users/tuanna/Projects/AI/claude-agent-team/scripts/init-new-project.sh)",
+      "Bash(chmod +x /Users/tuanna/Projects/AI/claude-agent-team/scripts/add-to-existing.sh)",
+      "Read(//private/tmp/**)",
+      "Bash(bash /Users/tuanna/Projects/AI/claude-agent-team/scripts/init-new-project.sh)",
+      "Bash(printf \"\\\\n1\\\\nn\\\\nn\\\\ny\\\\n\")",
+      "Bash(printf \"y\\\\n\")",
+      "Bash(bash /Users/tuanna/Projects/AI/claude-agent-team/scripts/init-new-project.sh /tmp/test-proj --type api-only)",
+      "Bash(bash /Users/tuanna/Projects/AI/claude-agent-team/scripts/init-new-project.sh /tmp/test-proj2 --type api-only)",
+      "Bash(chmod +x /Users/tuanna/Projects/AI/claude-agent-team/scripts/remove-from-project.sh)"
+    ],
+    "additionalDirectories": [
+      "/Users/tuanna/Projects/AI/claude-agent-team/templates/.claude",
+      "/Users/tuanna/Projects/AI/claude-agent-team"
+    ]
+  }
+}

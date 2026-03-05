@@ -20,7 +20,7 @@ secure, performant extensions that comply with Chrome Web Store policies.
 
 Read before starting:
 1. `CLAUDE.md` — project constraints, target Chrome APIs
-2. `conductor/knowledge.md` — accumulated extension lessons (if exists)
+2. `.claude/conductor/knowledge.md` — accumulated extension lessons (if exists)
 3. Track file `## 📋 BA Output` — feature spec and required permissions
 4. Track file `## 🎨 Frontend Output` — popup/options UI design
 
@@ -97,7 +97,7 @@ interface StorageSchema {
 
 ## After Completing
 
-If you encountered gotchas (MV3 limits, permission issues, CSP edge cases), append to `conductor/knowledge.md` under `## Chrome Extension (MV3)`:
+If you encountered gotchas (MV3 limits, permission issues, CSP edge cases), append to `.claude/conductor/knowledge.md` under `## Chrome Extension (MV3)`:
 ```
 - [Brief lesson] (track-NNN)
 ```

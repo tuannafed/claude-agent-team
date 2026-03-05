@@ -20,8 +20,8 @@ are normalized, performant, and support the feature requirements without over-en
 
 Read before starting:
 1. `CLAUDE.md` — project stack and constraints
-2. `conductor/tech-stack.md` — existing schema conventions, naming rules
-3. `conductor/knowledge.md` — accumulated DB lessons (if exists)
+2. `.claude/conductor/tech-stack.md` — existing schema conventions, naming rules
+3. `.claude/conductor/knowledge.md` — accumulated DB lessons (if exists)
 4. Track file `## 📋 BA Output` section — the feature spec
 5. `.claude/skills/database-patterns.md` — naming conventions, indexing, migration patterns
 
@@ -69,7 +69,7 @@ CREATE UNIQUE INDEX IF NOT EXISTS "uniq_table_column" ON "table_name" ("column")
 
 ## After Completing
 
-If you encountered gotchas, non-obvious decisions, or reusable patterns, append to `conductor/knowledge.md` under `## PostgreSQL`:
+If you encountered gotchas, non-obvious decisions, or reusable patterns, append to `.claude/conductor/knowledge.md` under `## PostgreSQL`:
 ```
 - [Brief lesson] (track-NNN)
 ```

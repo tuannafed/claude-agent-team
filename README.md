@@ -29,7 +29,7 @@ Agents run natively in Claude Code via `.claude/agents/` — no manual prompt pa
 │   │   ├── ai-engineer.md                │  model: sonnet
 │   │   ├── chrome-ext.md                 │  model: sonnet
 │   │   └── api-designer.md               │  model: sonnet
-│   ├── conductor/
+│   ├── .claude/conductor/
 │   │   ├── product.md                    ← Product vision template
 │   │   ├── tech-stack.md                 ← Tech decisions template
 │   │   ├── workflow.md                   ← Team rules template
@@ -51,7 +51,7 @@ my-project/                               ← Your project
 │   │   ├── code-reviewer.md
 │   │   └── ...
 │   └── commands/agent-team.md            ← /agent-team slash command
-└── conductor/
+└── .claude/conductor/
     ├── product.md
     ├── tech-stack.md
     ├── workflow.md
@@ -137,7 +137,7 @@ my-project/                               ← Your project
 
 ## Track File Format
 
-Each `conductor/tracks/track-NNN-slug.md` captures the full agent handoff chain:
+Each `.claude/conductor/tracks/track-NNN-slug.md` captures the full agent handoff chain:
 
 ```
 Track header (ID, status, phase, next step)
@@ -165,4 +165,4 @@ The **API Contract** is the key to parallel execution: once BA fills it in, DB E
 - Opus for BA + Reviewer (critical decisions — spec accuracy, security)
 - Sonnet for all implementation agents (cost-efficient for dev work)
 
-**Accumulated knowledge:** `conductor/knowledge.md` persists lessons learned across tracks so agents don't repeat the same mistakes (PostgreSQL gotchas, NestJS patterns, etc.)
+**Accumulated knowledge:** `.claude/conductor/knowledge.md` persists lessons learned across tracks so agents don't repeat the same mistakes (PostgreSQL gotchas, NestJS patterns, etc.)

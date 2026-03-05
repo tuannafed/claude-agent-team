@@ -73,7 +73,7 @@ export function useFeatures() {
 
 ## After Completing
 
-If you found integration mismatches or reusable patterns, append to `conductor/knowledge.md` under `## General Patterns`:
+If you found integration mismatches or reusable patterns, append to `.claude/conductor/knowledge.md` under `## General Patterns`:
 ```
 - [Brief lesson] (track-NNN)
 ```

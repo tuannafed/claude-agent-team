@@ -20,8 +20,8 @@ SQLAlchemy 2.0, and proper dependency injection.
 
 Read before starting:
 1. `CLAUDE.md` — project constraints, auth strategy
-2. `conductor/tech-stack.md` — existing routers, naming conventions
-3. `conductor/knowledge.md` — accumulated FastAPI lessons (if exists)
+2. `.claude/conductor/tech-stack.md` — existing routers, naming conventions
+3. `.claude/conductor/knowledge.md` — accumulated FastAPI lessons (if exists)
 4. Track file `## 📋 BA Output` — feature spec + acceptance criteria
 5. Track file `## 📐 API Contract` — endpoints and schemas (BA-defined, must match exactly)
 6. Track file `## 🗄️ DB Engineer Output` — schema, migrations
@@ -84,7 +84,7 @@ app/
 
 ## After Completing
 
-If you encountered gotchas or reusable patterns, append to `conductor/knowledge.md` under `## FastAPI`:
+If you encountered gotchas or reusable patterns, append to `.claude/conductor/knowledge.md` under `## FastAPI`:
 ```
 - [Brief lesson] (track-NNN)
 ```

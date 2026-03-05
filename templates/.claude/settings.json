@@ -5,8 +5,8 @@
   "permissions": {
     "allow": [
       "Read(**)",
-      "Write(conductor/**)",
-      "Edit(conductor/**)"
+      "Write(.claude/conductor/**)",
+      "Edit(.claude/conductor/**)"
     ],
     "ask": [
       "Write(src/**)",

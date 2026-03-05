@@ -19,22 +19,22 @@ Parse $ARGUMENTS to determine which action to take:
 You will perform BOTH roles in sequence within this single session, treating them as parallel work:
 
 **Step 1 — DB Engineer role:**
-1. Read `conductor/tracks/<track-id>*.md` — BA Spec section
-2. Read `conductor/tech-stack.md` for DB conventions
-3. Read `conductor/knowledge.md` for accumulated DB lessons
+1. Read `.claude/conductor/tracks/<track-id>*.md` — BA Spec section
+2. Read `.claude/conductor/tech-stack.md` for DB conventions
+3. Read `.claude/conductor/knowledge.md` for accumulated DB lessons
 4. Design schema, write DDL + migrations
 5. Fill in `## 🗄️ DB Engineer Output` section
-6. If you discovered any lessons, append them to `conductor/knowledge.md`
+6. If you discovered any lessons, append them to `.claude/conductor/knowledge.md`
 7. Mark DB phase as complete
 
 **Step 2 — Frontend role (immediately after, same session):**
 1. Read `## 📐 API Contract` section (NOT the DB schema — Frontend is independent)
 2. Read `## 📋 BA Output` for user stories
-3. Read `conductor/knowledge.md` for accumulated frontend lessons
+3. Read `.claude/conductor/knowledge.md` for accumulated frontend lessons
 4. Design routes, components, state management
 5. Fill in `## 🎨 Frontend Output` section
 6. Note any mock/fixture needed while Backend is not ready yet
-7. If you discovered any lessons, append them to `conductor/knowledge.md`
+7. If you discovered any lessons, append them to `.claude/conductor/knowledge.md`
 
 Update track after both complete:
 - `## Current Phase` → `parallel-done`
@@ -56,29 +56,29 @@ Next: /agent-team backend <track-id>
 You are acting as the **BA Agent**.
 
 1. Read `CLAUDE.md` for project context
-2. Read `conductor/product.md` for product context
-3. Read `conductor/workflow.md` for team rules
-4. Read `conductor/knowledge.md` for accumulated lessons
-5. Read `conductor/tracks.md` to find the next available track number
+2. Read `.claude/conductor/product.md` for product context
+3. Read `.claude/conductor/workflow.md` for team rules
+4. Read `.claude/conductor/knowledge.md` for accumulated lessons
+5. Read `.claude/conductor/tracks.md` to find the next available track number
 6. **Detect track type** — classify as `feature | bug | chore | refactor`
 7. **Assess your confidence** in understanding the requirements:
    - ≥ 90%: proceed directly
    - 70–89%: present 2-3 interpretations, ask user to pick one
    - < 70%: list open questions, do NOT write spec until answered
-8. Create a new track file: `conductor/tracks/track-NNN-<slug>.md`
+8. Create a new track file: `.claude/conductor/tracks/track-NNN-<slug>.md`
 9. Fill in the spec section based on **track type**:
    - `feature` → `## 📋 BA Output` + `## 📐 API Contract` (required for parallel)
    - `bug` → `## 📋 BA Output — Bug Report` only
    - `chore`/`refactor` → `## 📋 BA Output — Chore/Refactor Spec` only
 10. Set status to `in-progress`, phase to `ba`
-11. Register in `conductor/tracks.md`
+11. Register in `.claude/conductor/tracks.md`
 12. Report:
 ```
 Type: [feature|bug|chore|refactor]
 Confidence: X%
 
-✅ Track created: conductor/tracks/track-NNN-<slug>.md
-   Registered in: conductor/tracks.md
+✅ Track created: .claude/conductor/tracks/track-NNN-<slug>.md
+   Registered in: .claude/conductor/tracks.md
 
 Next options:
 ```
@@ -107,12 +107,12 @@ Next options:
 
 You are acting as the **DB Engineer Agent**.
 
-1. Read `conductor/tracks/<track-id>*.md` — BA Spec section
-2. Read `conductor/tech-stack.md` for DB conventions
-3. Read `conductor/knowledge.md` for accumulated DB lessons
+1. Read `.claude/conductor/tracks/<track-id>*.md` — BA Spec section
+2. Read `.claude/conductor/tech-stack.md` for DB conventions
+3. Read `.claude/conductor/knowledge.md` for accumulated DB lessons
 4. Design schema, write DDL + migrations, fill in `## 🗄️ DB Engineer Output` section
 5. Update phase to `db`
-6. If you discovered any lessons (gotchas, decisions), append to `conductor/knowledge.md`
+6. If you discovered any lessons (gotchas, decisions), append to `.claude/conductor/knowledge.md`
 7. Report: "Schema complete. Next: `/agent-team backend <track-id>`"
 
 ---
@@ -122,12 +122,12 @@ You are acting as the **DB Engineer Agent**.
 You are acting as the **Backend Dev Agent**.
 
 1. Check `CLAUDE.md` for backend stack (NestJS or FastAPI)
-2. Read `conductor/tracks/<track-id>*.md` — BA Spec + API Contract + DB schema sections
-3. Read `conductor/tech-stack.md` for naming conventions
-4. Read `conductor/knowledge.md` for accumulated backend lessons
+2. Read `.claude/conductor/tracks/<track-id>*.md` — BA Spec + API Contract + DB schema sections
+3. Read `.claude/conductor/tech-stack.md` for naming conventions
+4. Read `.claude/conductor/knowledge.md` for accumulated backend lessons
 5. Implement the backend feature and fill in `## ⚙️ Backend Output` section
 6. Update phase to `backend`
-7. If you discovered any lessons, append to `conductor/knowledge.md`
+7. If you discovered any lessons, append to `.claude/conductor/knowledge.md`
 8. Report: "Backend complete. Next: `/agent-team frontend <track-id>` or `/agent-team integrate <track-id>`"
 
 ---
@@ -136,12 +136,12 @@ You are acting as the **Backend Dev Agent**.
 
 You are acting as the **Frontend Dev Agent**.
 
-1. Read `conductor/tracks/<track-id>*.md` — BA Output + API Contract sections
+1. Read `.claude/conductor/tracks/<track-id>*.md` — BA Output + API Contract sections
 2. Read `CLAUDE.md` for frontend stack
-3. Read `conductor/knowledge.md` for accumulated frontend lessons
+3. Read `.claude/conductor/knowledge.md` for accumulated frontend lessons
 4. Implement frontend feature and fill in `## 🎨 Frontend Output` section
 5. Update phase to `frontend`
-6. If you discovered any lessons, append to `conductor/knowledge.md`
+6. If you discovered any lessons, append to `.claude/conductor/knowledge.md`
 7. Report: "Frontend complete. Next: `/agent-team integrate <track-id>` or `/agent-team review <track-id>`"
 
 ---
@@ -150,12 +150,12 @@ You are acting as the **Frontend Dev Agent**.
 
 You are acting as the **AI Engineer Agent**.
 
-1. Read `conductor/tracks/<track-id>*.md` — BA Spec + Backend sections
-2. Read `conductor/tech-stack.md` for LLM/vector DB stack
-3. Read `conductor/knowledge.md` for accumulated AI engineering lessons
+1. Read `.claude/conductor/tracks/<track-id>*.md` — BA Spec + Backend sections
+2. Read `.claude/conductor/tech-stack.md` for LLM/vector DB stack
+3. Read `.claude/conductor/knowledge.md` for accumulated AI engineering lessons
 4. Implement AI/LLM integration and fill in `## 🤖 AI Engineer Output` section
 5. Update phase to `ai`
-6. If you discovered any lessons (prompt patterns, cost gotchas), append to `conductor/knowledge.md`
+6. If you discovered any lessons (prompt patterns, cost gotchas), append to `.claude/conductor/knowledge.md`
 7. Report: "AI integration complete. Next: `/agent-team frontend <track-id>`"
 
 ---
@@ -164,8 +164,8 @@ You are acting as the **AI Engineer Agent**.
 
 You are acting as the **API Designer Agent**.
 
-1. Read `conductor/tracks/<track-id>*.md` — Backend Output section
-2. Read `conductor/tech-stack.md` for API versioning strategy
+1. Read `.claude/conductor/tracks/<track-id>*.md` — Backend Output section
+2. Read `.claude/conductor/tech-stack.md` for API versioning strategy
 3. Read the actual backend controller/router files referenced in the track
 4. Generate OpenAPI 3.1 spec, verify REST conventions, document all error responses
 5. Fill in `## 📐 API Designer Output` section
@@ -178,11 +178,11 @@ You are acting as the **API Designer Agent**.
 
 You are acting as the **Chrome Extension Dev Agent**.
 
-1. Read `conductor/tracks/<track-id>*.md` — BA Spec + Frontend sections
-2. Read `conductor/knowledge.md` for accumulated extension lessons
+1. Read `.claude/conductor/tracks/<track-id>*.md` — BA Spec + Frontend sections
+2. Read `.claude/conductor/knowledge.md` for accumulated extension lessons
 3. Implement extension architecture and fill in `## 🔌 Extension Output` section
 4. Update phase to `extension`
-5. If you discovered any lessons (MV3 gotchas, permissions), append to `conductor/knowledge.md`
+5. If you discovered any lessons (MV3 gotchas, permissions), append to `.claude/conductor/knowledge.md`
 6. Report: "Extension complete. Next: `/agent-team review <track-id>`"
 
 ---
@@ -191,7 +191,7 @@ You are acting as the **Chrome Extension Dev Agent**.
 
 You are acting as the **Integrator Agent**.
 
-1. Read `conductor/tracks/<track-id>*.md` — Backend + Frontend sections
+1. Read `.claude/conductor/tracks/<track-id>*.md` — Backend + Frontend sections
 2. Read the actual frontend and backend code files referenced in the track
 3. Connect frontend to backend, implement React Query hooks, fill in `## 🔗 Integrator Output` section
 4. Update phase to `integration`
@@ -216,7 +216,7 @@ You are acting as the **Code Reviewer Agent**.
 
 Resume work on an in-progress track.
 
-1. Read `conductor/tracks/<track-id>*.md`
+1. Read `.claude/conductor/tracks/<track-id>*.md`
 2. Read `## Status` → `## Current Phase` and `## Next Step`
 3. Report current state and ask what to do next:
 
@@ -238,7 +238,7 @@ What would you like to do?
 
 Show a summary of all tracks:
 
-1. Read `conductor/tracks.md` directly
+1. Read `.claude/conductor/tracks.md` directly
 2. Display the table as-is, then annotate each in-progress track with its next step:
 
 ```
