@@ -250,19 +250,19 @@ done
 # Select agents based on team type
 case "$TEAM_TYPE" in
   fullstack-web)
-    AGENTS="ba-agent db-engineer backend-nestjs backend-fastapi frontend-nextjs integrator code-reviewer"
+    AGENTS="ba-agent ba-agent-bug db-engineer backend-nestjs backend-fastapi frontend-nextjs integrator code-reviewer"
     ;;
   api-only)
-    AGENTS="ba-agent db-engineer backend-nestjs backend-fastapi api-designer code-reviewer"
+    AGENTS="ba-agent ba-agent-bug db-engineer backend-nestjs backend-fastapi api-designer code-reviewer"
     ;;
   ai-llm-app)
-    AGENTS="ba-agent backend-nestjs backend-fastapi ai-engineer frontend-nextjs code-reviewer"
+    AGENTS="ba-agent ba-agent-bug backend-nestjs backend-fastapi ai-engineer frontend-nextjs code-reviewer"
     ;;
   chrome-extension)
-    AGENTS="ba-agent frontend-nextjs chrome-ext code-reviewer"
+    AGENTS="ba-agent ba-agent-bug frontend-nextjs chrome-ext code-reviewer"
     ;;
   *)
-    AGENTS="ba-agent code-reviewer"
+    AGENTS="ba-agent ba-agent-bug code-reviewer"
     ;;
 esac
 
@@ -298,8 +298,7 @@ echo ""
 echo "✨ Done! Project initialized at: $PROJECT_PATH"
 echo ""
 echo "Next steps:"
-echo "  1. Open $PROJECT_PATH in Claude Code"
-echo "  2. Fill in CLAUDE.md with your actual project details"
-echo "  3. Fill in .claude/conductor/product.md with product vision"
-echo "  4. Fill in .claude/conductor/tech-stack.md with your decisions"
-echo "  5. Run: /agent-team init \"Your first feature\""
+echo "  1. Open Claude Code in: $PROJECT_PATH"
+echo "  2. Run: /agent-team setup   ← Claude scans codebase, auto-fills CLAUDE.md + product.md + tech-stack.md"
+echo "  3. Review the generated files and adjust anything incorrect"
+echo "  4. Run: /agent-team init \"Your first feature\""

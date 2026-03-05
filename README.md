@@ -19,8 +19,9 @@ Agents run natively in Claude Code via `.claude/agents/` — no manual prompt pa
 ├── templates/
 │   ├── CLAUDE.md.template                ← Per-project CLAUDE.md
 │   ├── .claude/agents/                   ← Native agent files (YAML frontmatter)
-│   │   ├── ba-agent.md                   │  model: opus  | confidence gate
-│   │   ├── code-reviewer.md              │  model: opus
+│   │   ├── ba-agent.md                   │  model: opus   | features only (spec + API contract)
+│   │   ├── ba-agent-bug.md               │  model: sonnet | bugs, chores, refactors
+│   │   ├── code-reviewer.md              │  model: sonnet | parallel 9-reviewer orchestrator
 │   │   ├── db-engineer.md                │  model: sonnet
 │   │   ├── backend-nestjs.md             │  model: sonnet
 │   │   ├── backend-fastapi.md            │  model: sonnet
@@ -40,7 +41,9 @@ Agents run natively in Claude Code via `.claude/agents/` — no manual prompt pa
 │   └── commands/agent-team.md            ← /agent-team slash command
 ├── scripts/
 │   ├── init-new-project.sh               ← Scaffold new project
-│   └── add-to-existing.sh                ← Add to existing project
+│   ├── add-to-existing.sh                ← Add to existing project
+│   ├── remove-from-project.sh            ← Remove agent team from project
+│   └── upgrade-project.sh                ← Sync latest templates into project
 └── COMPARISON.md                         ← Analysis vs reference repos
 
 my-project/                               ← Your project
@@ -48,6 +51,7 @@ my-project/                               ← Your project
 ├── .claude/
 │   ├── agents/                           ← Copied from templates, auto-detected
 │   │   ├── ba-agent.md
+│   │   ├── ba-agent-bug.md
 │   │   ├── code-reviewer.md
 │   │   └── ...
 │   └── commands/agent-team.md            ← /agent-team slash command
@@ -65,16 +69,41 @@ my-project/                               ← Your project
 
 ## Quick Start
 
-### New Project
+### Install globally (recommended)
 
 ```bash
-./scripts/init-new-project.sh ~/Projects/my-app --type fullstack-web
+./setup.sh
+source ~/.zshrc   # or ~/.bashrc
+
+agent-init    ~/Projects/my-app --type fullstack-web
+agent-add     ~/Projects/existing-app --type api-only
+agent-remove  ~/Projects/my-app
+agent-upgrade ~/Projects/my-app
 ```
 
-### Existing Project
+### Or run scripts directly
 
 ```bash
-./scripts/add-to-existing.sh ~/Projects/existing-app --type api-only
+./scripts/init-new-project.sh    ~/Projects/my-app --type fullstack-web
+./scripts/add-to-existing.sh     ~/Projects/existing-app --type api-only
+./scripts/remove-from-project.sh ~/Projects/my-app
+./scripts/upgrade-project.sh     ~/Projects/my-app
+```
+
+### Upgrade flags
+
+```bash
+agent-upgrade ~/Projects/my-app                  # update agents, commands, skills to latest
+agent-upgrade ~/Projects/my-app --dry-run        # preview what would change
+agent-upgrade ~/Projects/my-app --type api-only  # override team type (auto-detected by default)
+```
+
+### Remove flags
+
+```bash
+agent-remove ~/Projects/my-app                   # remove everything (confirms CLAUDE.md)
+agent-remove ~/Projects/my-app --keep-tracks     # preserve .claude/conductor/tracks/ history
+agent-remove ~/Projects/my-app --dry-run         # preview without deleting
 ```
 
 ### Team Types
@@ -91,6 +120,9 @@ my-project/                               ← Your project
 ## Daily Workflow
 
 ```bash
+# First time setup — Claude scans codebase and auto-fills context files
+/agent-team setup
+
 # Start a new feature — BA agent activates automatically
 /agent-team init "User authentication with JWT"
 
@@ -120,7 +152,9 @@ my-project/                               ← Your project
 
 | Agent | Model | Activates on |
 |-------|-------|-------------|
-| BA | Opus | `/agent-team init` |
+| Setup | Sonnet | `/agent-team setup` |
+| BA (feature) | **Opus** | `/agent-team init` — feature tracks |
+| BA (bug/chore/refactor) | Sonnet | `/agent-team init` — bug, chore, refactor tracks |
 | DB Engineer | Sonnet | `/agent-team db` |
 | Backend (NestJS) | Sonnet | `/agent-team backend` (NestJS projects) |
 | Backend (FastAPI) | Sonnet | `/agent-team backend` (FastAPI projects) |
@@ -129,9 +163,9 @@ my-project/                               ← Your project
 | Chrome Ext Dev | Sonnet | `/agent-team extension` |
 | Integrator | Sonnet | `/agent-team integrate` |
 | API Designer | Sonnet | `/agent-team api` |
-| Code Reviewer | Opus | `/agent-team review` |
+| Code Reviewer | Sonnet | `/agent-team review` |
 
-**BA and Code Reviewer use Opus** — they make the highest-stakes decisions (spec correctness, security).
+**Only the feature BA uses Opus** — writing full specs with API contracts requires the deepest reasoning. All other agents, including the Code Reviewer, run on Sonnet.
 
 ---
 
@@ -162,7 +196,7 @@ The **API Contract** is the key to parallel execution: once BA fills it in, DB E
 - <70% → asks clarifying questions first
 
 **Model tier strategy:**
-- Opus for BA + Reviewer (critical decisions — spec accuracy, security)
-- Sonnet for all implementation agents (cost-efficient for dev work)
+- Opus for feature BA only (complex spec + API contract requires deep reasoning)
+- Sonnet for bug/chore BA, Code Reviewer, and all implementation agents (cost-efficient)
 
 **Accumulated knowledge:** `.claude/conductor/knowledge.md` persists lessons learned across tracks so agents don't repeat the same mistakes (PostgreSQL gotchas, NestJS patterns, etc.)

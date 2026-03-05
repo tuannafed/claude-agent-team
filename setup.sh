@@ -4,9 +4,10 @@ set -euo pipefail
 # setup.sh — Install claude-agent-team globally
 #
 # Adds shell aliases so you can run from any directory:
-#   agent-init   <path> --type <type>   → init new project
-#   agent-add    <path> --type <type>   → add to existing project
-#   agent-remove <path>                 → remove agent team from project
+#   agent-init    <path> --type <type>   → init new project
+#   agent-add     <path> --type <type>   → add to existing project
+#   agent-remove  <path>                 → remove agent team from project
+#   agent-upgrade <path>                 → sync latest templates into existing project
 #
 # Usage:
 #   ./setup.sh              → install
@@ -76,6 +77,7 @@ install() {
   chmod +x "$SCRIPTS_DIR/init-new-project.sh"
   chmod +x "$SCRIPTS_DIR/add-to-existing.sh"
   chmod +x "$SCRIPTS_DIR/remove-from-project.sh"
+  chmod +x "$SCRIPTS_DIR/upgrade-project.sh"
 
   # Append block to shell rc
   cat >> "$rc_file" <<EOF
@@ -92,15 +94,19 @@ alias agent-add="$SCRIPTS_DIR/add-to-existing.sh"
 
 # Remove agent team files from a project
 alias agent-remove="$SCRIPTS_DIR/remove-from-project.sh"
+
+# Sync latest agent/command/skill templates into an existing project
+alias agent-upgrade="$SCRIPTS_DIR/upgrade-project.sh"
 $MARKER_END
 EOF
 
   echo "✅ Installed! Aliases added to $rc_file"
   echo ""
   echo "Commands:"
-  echo "  agent-init   <path> --type <fullstack-web|api-only|ai-llm-app|chrome-extension>"
-  echo "  agent-add    <path> --type <fullstack-web|api-only|ai-llm-app|chrome-extension>"
-  echo "  agent-remove <path> [--keep-tracks] [--dry-run]"
+  echo "  agent-init    <path> --type <fullstack-web|api-only|ai-llm-app|chrome-extension>"
+  echo "  agent-add     <path> --type <fullstack-web|api-only|ai-llm-app|chrome-extension>"
+  echo "  agent-remove  <path> [--keep-tracks] [--dry-run]"
+  echo "  agent-upgrade <path> [--type <team-type>] [--dry-run]"
   echo ""
   echo "Optional flags for agent-init:"
   echo "  --name <project-name>   override project name (default: dirname)"
@@ -121,9 +127,10 @@ case "${1:-}" in
     echo "  ./setup.sh --uninstall Remove aliases"
     echo ""
     echo "After install:"
-    echo "  agent-init   <path> --type <type>     Init new project"
-    echo "  agent-add    <path> --type <type>     Add to existing project"
-    echo "  agent-remove <path> [--keep-tracks]  Remove from project"
+    echo "  agent-init    <path> --type <type>     Init new project"
+    echo "  agent-add     <path> --type <type>     Add to existing project"
+    echo "  agent-remove  <path> [--keep-tracks]  Remove from project"
+    echo "  agent-upgrade <path> [--dry-run]      Sync latest templates"
     ;;
   "") install ;;
   *) echo "Unknown option: $1"; echo "Usage: ./setup.sh [--uninstall]"; exit 1 ;;

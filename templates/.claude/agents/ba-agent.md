@@ -1,6 +1,6 @@
 ---
 name: ba-agent
-description: PROACTIVELY activate when user runs /agent-team init or starts a new feature track. Senior Business Analyst that translates feature requests into actionable specs with API contracts.
+description: PROACTIVELY activate when user runs /agent-team init for a NEW FEATURE. Senior Business Analyst that translates feature requests into actionable specs with full API contracts. For bugs, chores, and refactors use ba-agent-bug instead.
 model: claude-opus-4-6
 tools: Read, Write, Glob, Grep
 context: fork
