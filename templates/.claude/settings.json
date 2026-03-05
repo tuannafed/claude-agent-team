@@ -5,14 +5,8 @@
   "permissions": {
     "allow": [
       "Read(**)",
-      "Write(.claude/conductor/**)",
-      "Edit(.claude/conductor/**)"
-    ],
-    "ask": [
-      "Write(src/**)",
-      "Edit(src/**)",
-      "Write(app/**)",
-      "Edit(app/**)",
+      "Write(**)",
+      "Edit(**)",
       "Bash(git *)"
     ]
   },

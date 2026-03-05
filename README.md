@@ -6,7 +6,7 @@ Agents run natively in Claude Code via `.claude/agents/` — no manual prompt pa
 ## How It Works
 
 1. Run the init script to scaffold your project
-2. Claude Code auto-detects agents in `.claude/agents/`
+2. Open your project in Claude Code (VSCode or terminal)
 3. Use `/agent-team` slash commands to advance through the pipeline
 4. Each agent writes output to its section in the track file — the next agent picks up from there
 
@@ -72,6 +72,7 @@ my-project/                               ← Your project
 ### Install globally (recommended)
 
 ```bash
+# Run in terminal (Warp, iTerm, zsh — any shell)
 ./setup.sh
 source ~/.zshrc   # or ~/.bashrc
 
@@ -80,6 +81,29 @@ agent-add     ~/Projects/existing-app --type api-only
 agent-remove  ~/Projects/my-app
 agent-upgrade ~/Projects/my-app
 ```
+
+> After init, open the project in **VSCode** to use `/agent-team` slash commands.
+
+### Run from terminal (Warp / iTerm2)
+
+If you prefer the terminal, use the `agent-team` CLI alias (installed by `setup.sh`):
+
+```bash
+# Must be run from inside your project directory (with .claude/)
+cd ~/Projects/my-app
+
+agent-team init "User authentication with JWT"   # feature (Opus)
+agent-team init --bug "Login crashes on mobile"  # bug/chore (Sonnet)
+agent-team db track-001
+agent-team backend track-001
+agent-team frontend track-001
+agent-team integrate track-001
+agent-team review track-001
+agent-team status
+agent-team resume track-001
+```
+
+> The terminal CLI uses `claude --agent <name>` to invoke agents directly — no VSCode required.
 
 ### Or run scripts directly
 
@@ -119,32 +143,32 @@ agent-remove ~/Projects/my-app --dry-run         # preview without deleting
 
 ## Daily Workflow
 
+**In VSCode** (slash commands):
 ```bash
-# First time setup — Claude scans codebase and auto-fills context files
 /agent-team setup
-
-# Start a new feature — BA agent activates automatically
 /agent-team init "User authentication with JWT"
-
-# Parallel: DB schema + Frontend UI simultaneously (recommended)
 /agent-team parallel db frontend track-001
-
-# Or sequential
-/agent-team db track-001
-/agent-team frontend track-001
-
-# Backend reads DB schema + API contract
 /agent-team backend track-001
-
-# Wire frontend to backend (fullstack-web only)
 /agent-team integrate track-001
-
-# Review before merge
 /agent-team review track-001
-
-# Check all active tracks
 /agent-team status
 ```
+
+**In terminal** (Warp / iTerm2):
+```bash
+cd ~/Projects/my-app
+
+agent-team setup
+agent-team init "User authentication with JWT"
+agent-team db track-001
+agent-team frontend track-001
+agent-team backend track-001
+agent-team integrate track-001
+agent-team review track-001
+agent-team status
+```
+
+> Note: `parallel` sub-command is VSCode-only. In terminal, run `db` and `frontend` sequentially.
 
 ---
 
@@ -200,3 +224,5 @@ The **API Contract** is the key to parallel execution: once BA fills it in, DB E
 - Sonnet for bug/chore BA, Code Reviewer, and all implementation agents (cost-efficient)
 
 **Accumulated knowledge:** `.claude/conductor/knowledge.md` persists lessons learned across tracks so agents don't repeat the same mistakes (PostgreSQL gotchas, NestJS patterns, etc.)
+
+**Auto-approved permissions:** The generated `.claude/settings.json` grants Claude full Read/Write/Edit access across the project so agents never pause to ask for file permission. Git commands are also pre-approved. To restrict access, edit the `permissions.allow` list in `.claude/settings.json`.

@@ -10,7 +10,11 @@
       "Bash(printf \"y\\\\n\")",
       "Bash(bash /Users/tuanna/Projects/AI/claude-agent-team/scripts/init-new-project.sh /tmp/test-proj --type api-only)",
       "Bash(bash /Users/tuanna/Projects/AI/claude-agent-team/scripts/init-new-project.sh /tmp/test-proj2 --type api-only)",
-      "Bash(chmod +x /Users/tuanna/Projects/AI/claude-agent-team/scripts/remove-from-project.sh)"
+      "Bash(chmod +x /Users/tuanna/Projects/AI/claude-agent-team/scripts/remove-from-project.sh)",
+      "Bash(claude --version)",
+      "Bash(claude agents --help)",
+      "Bash(chmod +x /Users/tuanna/Projects/AI/claude-agent-team/scripts/agent-team-cli.sh)",
+      "Bash(bash /Users/tuanna/Projects/AI/claude-agent-team/scripts/agent-team-cli.sh help)"
     ],
     "additionalDirectories": [
       "/Users/tuanna/Projects/AI/claude-agent-team/templates/.claude",

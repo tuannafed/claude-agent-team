@@ -78,6 +78,7 @@ install() {
   chmod +x "$SCRIPTS_DIR/add-to-existing.sh"
   chmod +x "$SCRIPTS_DIR/remove-from-project.sh"
   chmod +x "$SCRIPTS_DIR/upgrade-project.sh"
+  chmod +x "$SCRIPTS_DIR/agent-team-cli.sh"
 
   # Append block to shell rc
   cat >> "$rc_file" <<EOF
@@ -97,6 +98,9 @@ alias agent-remove="$SCRIPTS_DIR/remove-from-project.sh"
 
 # Sync latest agent/command/skill templates into an existing project
 alias agent-upgrade="$SCRIPTS_DIR/upgrade-project.sh"
+
+# Run agent-team workflow from terminal (alternative to VSCode slash commands)
+alias agent-team="$SCRIPTS_DIR/agent-team-cli.sh"
 $MARKER_END
 EOF
 
@@ -107,6 +111,7 @@ EOF
   echo "  agent-add     <path> --type <fullstack-web|api-only|ai-llm-app|chrome-extension>"
   echo "  agent-remove  <path> [--keep-tracks] [--dry-run]"
   echo "  agent-upgrade <path> [--type <team-type>] [--dry-run]"
+  echo "  agent-team    <subcommand> [args]    (run from inside your project)"
   echo ""
   echo "Optional flags for agent-init:"
   echo "  --name <project-name>   override project name (default: dirname)"
@@ -131,6 +136,7 @@ case "${1:-}" in
     echo "  agent-add     <path> --type <type>     Add to existing project"
     echo "  agent-remove  <path> [--keep-tracks]  Remove from project"
     echo "  agent-upgrade <path> [--dry-run]      Sync latest templates"
+    echo "  agent-team    <subcommand>            Run workflow from terminal"
     ;;
   "") install ;;
   *) echo "Unknown option: $1"; echo "Usage: ./setup.sh [--uninstall]"; exit 1 ;;
