@@ -4,6 +4,15 @@ All improvements adopted from external repos, ordered chronologically.
 
 ---
 
+## [Fix] `/agent-team init` conductor state and no-overwrite (2025-03)
+
+- **Check conductor before creating:** Init must read `.claude/conductor/tracks.md` (if exists) and list `.claude/conductor/tracks/` to infer used track numbers. Compute next `NNN` as the smallest positive integer with no existing `track-NNN-*.md`; do not assume track-001.
+- **Append-only registry:** When updating `tracks.md`, append one new row; never replace the entire table with only the new track.
+- **No overwrite of config:** Do not overwrite `product.md`, `workflow.md`, `tech-stack.md`, or `knowledge.md` if they already exist; create only when missing.
+- Updated: `templates/commands/agent-team.md`, `templates/.claude/agents/ba-agent.md`, `templates/.claude/agents/ba-agent-bug.md`.
+
+---
+
 ## [Adopted from shanraisshan/claude-code-config]
 
 ### Agent Frontmatter Enhancements

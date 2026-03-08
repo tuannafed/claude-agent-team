@@ -59,23 +59,30 @@ You are acting as the **BA Agent**.
 > - `feature` → delegate to **ba-agent** (Opus — full spec + API contract)
 > - `bug` / `chore` / `refactor` → delegate to **ba-agent-bug** (Sonnet — focused report, no API contract)
 
-1. Read `CLAUDE.md` for project context
-2. Read `.claude/conductor/product.md` for product context
-3. Read `.claude/conductor/workflow.md` for team rules
-4. Read `.claude/conductor/knowledge.md` for accumulated lessons
-5. Read `.claude/conductor/tracks.md` to find the next available track number
+**MANDATORY — Check conductor state before creating or writing anything:**
+
+1. **Read** `.claude/conductor/tracks.md` if it exists (full content).
+2. **List** `.claude/conductor/tracks/` and parse existing track file names (e.g. `track-001-*.md`, `track-002-*.md`, …) to see which track numbers are already used.
+3. **Compute the next track number** `NNN`: the smallest positive integer (001, 002, …) such that no file `track-NNN-*.md` exists in `.claude/conductor/tracks/` and (if `tracks.md` exists) no row in the table uses that ID. Examples: no tracks yet → **001**; 001..004 exist → **005**. Do **not** assume track-001 when other tracks already exist.
+4. **Do NOT write to conductor config during init.** For `.claude/conductor/product.md`, `workflow.md`, `tech-stack.md`, `knowledge.md`: you may **read** them for context only. Do **not** create, overwrite, or edit these files in this command — use `/agent-team setup` to fill them, or they are created by `agent-init` when scaffolding a new project.
+
+Then:
+
+5. Read `CLAUDE.md` for project context. You may read `.claude/conductor/product.md`, `workflow.md`, `knowledge.md` for context **only** — do not write, edit, or create these files.
 6. **Detect track type** — classify as `feature | bug | chore | refactor`
 7. **Assess your confidence** in understanding the requirements:
    - ≥ 90%: proceed directly
    - 70–89%: present 2-3 interpretations, ask user to pick one
    - < 70%: list open questions, do NOT write spec until answered
-8. Create a new track file: `.claude/conductor/tracks/track-NNN-<slug>.md`
+8. **Create exactly one new file:** `.claude/conductor/tracks/track-NNN-<slug>.md` (e.g. `track-005-post-engine.md`). Do **not** create, overwrite, or delete any existing file in `.claude/conductor/tracks/` (e.g. do not create `track-001-<anything>.md` if `track-001-*.md` already exists).
 9. Fill in the spec section based on **track type**:
    - `feature` → `## 📋 BA Output` + `## 📐 API Contract` (required for parallel)
    - `bug` → `## 📋 BA Output — Bug Report` only
    - `chore`/`refactor` → `## 📋 BA Output — Chore/Refactor Spec` only
 10. Set status to `in-progress`, phase to `ba`
-11. Register in `.claude/conductor/tracks.md`
+11. **Update the registry without dropping existing rows:**
+    - If `.claude/conductor/tracks.md` **exists:** read its full content, **append** one new row for the new track (table columns: Status | ID | Title | Type | Phase | Created | Updated — see existing `tracks.md`), then write the file back with **all original rows plus the new row**. Do **not** replace the entire table with only the new track.
+    - If `.claude/conductor/tracks.md` **does not exist:** create it with a single-row table for the new track (and optional header/legend as in current format).
 12. Report:
 ```
 Type: [feature|bug|chore|refactor]
