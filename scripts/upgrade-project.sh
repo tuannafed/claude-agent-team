@@ -142,11 +142,6 @@ fi
 echo "Updating agents..."
 mkdir -p "$DOTCLAUDE/agents"
 
-for agent in $AGENTS; do
-  # Also include any optional domain agents already present
-  :
-done
-
 # Update agents that EXIST in the project (don't add new ones unless they're in AGENTS)
 for agent in $AGENTS; do
   update_file \

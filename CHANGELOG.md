@@ -61,7 +61,7 @@ All improvements adopted from external repos, ordered chronologically.
 
 ### tracks.md Registry
 
-- `**templates/conductor/tracks.md**` — master registry table of all tracks
+- `**templates/.claude/conductor/tracks.md**` — master registry table of all tracks
   - Columns: Status `[ ]`/`[~]`/`[x]`, ID, Title, Type, Phase, Created, Updated
 - `**init-new-project.sh**` updated to copy `tracks.md` into new projects
 
@@ -148,13 +148,13 @@ Restructured `conductor/knowledge.md` with 5 clear sections:
 | `templates/.claude/agents/*.md` (10 files)  | Updated frontmatter                      | shanraisshan            |
 | `templates/.claude/settings.json`           | Permissions + env + hooks                | shanraisshan + ECC      |
 | `templates/commands/agent-team.md`          | model frontmatter + init/status handlers | shanraisshan + wshobson |
-| `templates/conductor/tracks.md`             | Created                                  | wshobson                |
+| `templates/.claude/conductor/tracks.md`     | Created                                  | wshobson                |
 | `templates/.claude/agents/ba-agent.md`      | Full rewrite                             | wshobson                |
 | `templates/commands/checkpoint.md`          | Created                                  | ECC                     |
 | `templates/commands/learn.md`               | Created                                  | ECC                     |
 | `templates/.claude/agents/code-reviewer.md` | Four Questions section                   | SuperClaude             |
 | `templates/agent-prompts/code-reviewer.md`  | Four Questions section                   | SuperClaude             |
-| `templates/conductor/knowledge.md`          | Restructured                             | SuperClaude             |
+| `templates/.claude/conductor/knowledge.md`  | Restructured                             | SuperClaude             |
 | `scripts/init-new-project.sh`               | tracks.md + commands loop                | wshobson + ECC          |
 | `WORKFLOW.md`                               | Created (sequential + parallel diagrams) | Original                |
 
