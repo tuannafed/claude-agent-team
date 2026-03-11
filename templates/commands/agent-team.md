@@ -28,13 +28,17 @@ You will perform BOTH roles in sequence within this single session, treating the
 7. Mark DB phase as complete
 
 **Step 2 — Frontend role (immediately after, same session):**
-1. Read `## 📐 API Contract` section (NOT the DB schema — Frontend is independent)
-2. Read `## 📋 BA Output` for user stories
-3. Read `.claude/conductor/knowledge.md` for accumulated frontend lessons
-4. Design routes, components, state management
-5. Fill in `## 🎨 Frontend Output` section
-6. Note any mock/fixture needed while Backend is not ready yet
-7. If you discovered any lessons, append them to `.claude/conductor/knowledge.md`
+1. Read `.claude/conductor/project-conventions.md`
+2. Read `.claude/skills/shared/convention-resolution.md`
+3. Read each skill referenced in `project-conventions.md`
+4. Read `## 📐 API Contract` section (NOT the DB schema — Frontend is independent)
+5. Read `## 📋 BA Output` for user stories
+6. Read `.claude/conductor/knowledge.md` for accumulated frontend lessons
+7. Write a short `### Convention Resolution` section in `## 🎨 Frontend Output`
+8. Design routes, components, and state/data handling according to the selected convention
+9. Fill in `## 🎨 Frontend Output` section
+10. Note any mock/fixture needed while Backend is not ready yet
+11. If you discovered any lessons, append them to `.claude/conductor/knowledge.md`
 
 Update track after both complete:
 - `## Current Phase` → `parallel-done`
@@ -133,13 +137,17 @@ You are acting as the **DB Engineer Agent**.
 You are acting as the **Backend Dev Agent**.
 
 1. Check `CLAUDE.md` for backend stack (NestJS or FastAPI)
-2. Read `.claude/conductor/tracks/<track-id>*.md` — BA Spec + API Contract + DB schema sections
-3. Read `.claude/conductor/tech-stack.md` for naming conventions
-4. Read `.claude/conductor/knowledge.md` for accumulated backend lessons
-5. Implement the backend feature and fill in `## ⚙️ Backend Output` section
-6. Update phase to `backend`
-7. If you discovered any lessons, append to `.claude/conductor/knowledge.md`
-8. Report: "Backend complete. Next: `/agent-team frontend <track-id>` or `/agent-team integrate <track-id>`"
+2. Read `.claude/conductor/project-conventions.md`
+3. Read `.claude/skills/shared/convention-resolution.md`
+4. Read each skill referenced in `project-conventions.md`
+5. Read `.claude/conductor/tracks/<track-id>*.md` — BA Spec + API Contract + DB schema sections
+6. Read `.claude/conductor/tech-stack.md` for naming conventions
+7. Read `.claude/conductor/knowledge.md` for accumulated backend lessons
+8. Write a short `### Convention Resolution` section in `## ⚙️ Backend Output`
+9. Implement the backend feature and fill in `## ⚙️ Backend Output` section
+10. Update phase to `backend`
+11. If you discovered any lessons, append to `.claude/conductor/knowledge.md`
+12. Report: "Backend complete. Next: `/agent-team frontend <track-id>` or `/agent-team integrate <track-id>`"
 
 ---
 
@@ -147,13 +155,17 @@ You are acting as the **Backend Dev Agent**.
 
 You are acting as the **Frontend Dev Agent**.
 
-1. Read `.claude/conductor/tracks/<track-id>*.md` — BA Output + API Contract sections
-2. Read `CLAUDE.md` for frontend stack
-3. Read `.claude/conductor/knowledge.md` for accumulated frontend lessons
-4. Implement frontend feature and fill in `## 🎨 Frontend Output` section
-5. Update phase to `frontend`
-6. If you discovered any lessons, append to `.claude/conductor/knowledge.md`
-7. Report: "Frontend complete. Next: `/agent-team integrate <track-id>` or `/agent-team review <track-id>`"
+1. Read `.claude/conductor/project-conventions.md`
+2. Read `.claude/skills/shared/convention-resolution.md`
+3. Read each skill referenced in `project-conventions.md`
+4. Read `.claude/conductor/tracks/<track-id>*.md` — BA Output + API Contract sections
+5. Read `CLAUDE.md` for frontend stack
+6. Read `.claude/conductor/knowledge.md` for accumulated frontend lessons
+7. Write a short `### Convention Resolution` section in `## 🎨 Frontend Output`
+8. Implement frontend feature using the selected folder, state, and API client conventions
+9. Update phase to `frontend`
+10. If you discovered any lessons, append to `.claude/conductor/knowledge.md`
+11. Report: "Frontend complete. Next: `/agent-team integrate <track-id>` or `/agent-team review <track-id>`"
 
 ---
 
@@ -202,11 +214,15 @@ You are acting as the **Chrome Extension Dev Agent**.
 
 You are acting as the **Integrator Agent**.
 
-1. Read `.claude/conductor/tracks/<track-id>*.md` — Backend + Frontend sections
-2. Read the actual frontend and backend code files referenced in the track
-3. Connect frontend to backend, implement React Query hooks, fill in `## 🔗 Integrator Output` section
-4. Update phase to `integration`
-5. Report: "Integration complete. Next: `/agent-team review <track-id>`"
+1. Read `.claude/conductor/project-conventions.md`
+2. Read `.claude/skills/shared/convention-resolution.md`
+3. Read each skill referenced in `project-conventions.md`
+4. Read `.claude/conductor/tracks/<track-id>*.md` — Backend + Frontend sections
+5. Read the actual frontend and backend code files referenced in the track
+6. Write a short `### Convention Resolution` section in `## 🔗 Integrator Output`
+7. Connect frontend to backend using the selected typed client and data integration pattern, then fill in `## 🔗 Integrator Output`
+8. Update phase to `integration`
+9. Report: "Integration complete. Next: `/agent-team review <track-id>`"
 
 ---
 
@@ -241,6 +257,9 @@ Which reviewers? [1-9 or Enter for all]:
 Before launching agents, read:
 - `.claude/conductor/tracks/<track-id>*.md` — full track (BA spec + all outputs)
 - `CLAUDE.md` — project stack and conventions
+- `.claude/conductor/project-conventions.md` — archetype, required patterns, forbidden patterns, overrides
+- `.claude/skills/shared/convention-resolution.md`
+- Each skill referenced in `project-conventions.md`
 - The actual code files referenced in the track
 
 **Step 3 — Launch selected reviewers in parallel**
@@ -309,6 +328,7 @@ Review for:
 - Naming: matches project patterns?
 - File organization: right place?
 - Consistency: matches surrounding code style?
+- Convention compliance: folder contract and forbidden patterns honored?
 
 If clean: "No quality or style issues identified."
 ```
@@ -389,6 +409,13 @@ After all selected reviewers complete, produce a prioritized summary:
 ```
 ## 🔍 Code Review — <track-id>
 
+### Convention Resolution
+- Archetype reviewed: `...`
+- Required patterns reviewed: `...`
+- Folder contract checked: `...`
+- Forbidden patterns checked: `...`
+- Overrides honored: none
+
 ### Needs Attention (<N> issues)
 1. [Security] <title> — file:line
    <brief description>
@@ -417,6 +444,7 @@ Tests (N passed), Linter (no issues), [other clean reviewers...]
 
 Write the full synthesis into `## 🔍 Code Review` section of the track file.
 Set `### Review Status` to `approved` (Ready to Merge) or `changes-requested` (Needs Attention / Needs Work).
+Treat convention violations from `.claude/conductor/project-conventions.md` as explicit findings, not optional notes.
 
 ---
 

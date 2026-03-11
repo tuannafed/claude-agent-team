@@ -1,11 +1,12 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Usage: ./init-new-project.sh [<project-path>] [--type <team-type>] [--name <project-name>] [--chrome-ext] [--ai]
+# Usage: ./init-new-project.sh [<project-path>] [--type <team-type>] [--name <project-name>] [--chrome-ext] [--ai] [--convention-preset <preset>]
 # If called with no arguments, enters interactive mode.
 # Types: fullstack-web | api-only | ai-llm-app | chrome-extension
 # Flags: --chrome-ext  also copies chrome-extension domain skills
 #        --ai          also copies AI/RAG domain skills
+#        --convention-preset  copies a neutral project convention preset into conductor
 
 TEMPLATE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/templates"
 
@@ -40,6 +41,36 @@ TEAM_TYPE=""
 PROJECT_NAME=""
 INCLUDE_CHROME_EXT=false
 INCLUDE_AI=false
+CONVENTION_PRESET=""
+
+copy_skill_directory() {
+  local relative_dir="$1"
+  local source_dir="$TEMPLATE_DIR/.claude/skills/$relative_dir"
+  local target_dir="$PROJECT_PATH/.claude/skills/$relative_dir"
+
+  [[ -d "$source_dir" ]] || return
+
+  mkdir -p "$target_dir"
+  while IFS= read -r -d '' source_file; do
+    local file_name dest_file
+    file_name="$(basename "$source_file")"
+    dest_file="$target_dir/$file_name"
+
+    if [[ ! -f "$dest_file" ]]; then
+      cp "$source_file" "$dest_file"
+      echo "   ✅ .claude/skills/$relative_dir/$file_name"
+    else
+      echo "   ⏭️  .claude/skills/$relative_dir/$file_name (already exists)"
+    fi
+  done < <(find "$source_dir" -maxdepth 1 -name "*.md" -print0)
+}
+
+default_convention_preset() {
+  case "$1" in
+    fullstack-web|ai-llm-app) echo "feature-saas-react-query-zustand" ;;
+    *) echo "" ;;
+  esac
+}
 
 while [[ $# -gt 0 ]]; do
   case $1 in
@@ -47,6 +78,7 @@ while [[ $# -gt 0 ]]; do
     --name) PROJECT_NAME="$2"; shift 2 ;;
     --chrome-ext) INCLUDE_CHROME_EXT=true; shift ;;
     --ai) INCLUDE_AI=true; shift ;;
+    --convention-preset) CONVENTION_PRESET="$2"; shift 2 ;;
     -*) echo "Unknown flag: $1"; exit 1 ;;
     *) PROJECT_PATH="$1"; shift ;;
   esac
@@ -112,6 +144,10 @@ if [[ -z "$PROJECT_NAME" ]]; then
   PROJECT_NAME="$(basename "$PROJECT_PATH")"
 fi
 
+if [[ -z "$CONVENTION_PRESET" ]]; then
+  CONVENTION_PRESET="$(default_convention_preset "$TEAM_TYPE")"
+fi
+
 echo ""
 echo "─────────────────────────────────────────"
 echo "  Project : $PROJECT_NAME"
@@ -119,6 +155,7 @@ echo "  Type    : $TEAM_TYPE"
 echo "  Path    : $PROJECT_PATH"
 [[ "$INCLUDE_CHROME_EXT" == true ]] && echo "  +skills : chrome-extension"
 [[ "$INCLUDE_AI" == true ]]         && echo "  +skills : ai/rag"
+[[ -n "$CONVENTION_PRESET" ]]      && echo "  Preset  : $CONVENTION_PRESET"
 echo "─────────────────────────────────────────"
 echo ""
 if [[ -t 0 ]]; then
@@ -150,6 +187,25 @@ for template in product.md tech-stack.md workflow.md knowledge.md tracks.md; do
     echo "   ⏭️  .claude/conductor/$template (already exists, skipped)"
   fi
 done
+
+if [[ ! -f "$PROJECT_PATH/.claude/conductor/project-conventions.md" ]]; then
+  PRESET_SRC="$TEMPLATE_DIR/convention-presets/$CONVENTION_PRESET.md"
+  TARGET_CONVENTIONS="$PROJECT_PATH/.claude/conductor/project-conventions.md"
+
+  if [[ -n "$CONVENTION_PRESET" ]] && [[ -f "$PRESET_SRC" ]]; then
+    cp "$PRESET_SRC" "$TARGET_CONVENTIONS"
+  else
+    cp "$TEMPLATE_DIR/.claude/conductor/project-conventions.md" "$TARGET_CONVENTIONS"
+  fi
+
+  sed -i.bak "s/{{PROJECT_NAME}}/$PROJECT_NAME/g" "$TARGET_CONVENTIONS"
+  sed -i.bak "s/{{TEAM_TYPE}}/$TEAM_TYPE/g" "$TARGET_CONVENTIONS"
+  sed -i.bak "s/{{CONVENTION_PRESET}}/${CONVENTION_PRESET:-custom}/g" "$TARGET_CONVENTIONS"
+  rm "$TARGET_CONVENTIONS.bak"
+  echo "   ✅ .claude/conductor/project-conventions.md"
+else
+  echo "   ⏭️  .claude/conductor/project-conventions.md (already exists, skipped)"
+fi
 
 # 2. Create CLAUDE.md
 echo ""
@@ -213,7 +269,7 @@ mkdir -p "$PROJECT_PATH/.claude/skills"
 CORE_SKILLS="api-contract security-baseline testing-strategy git-workflow"
 
 # Framework skills — copied for all standard project types
-FRAMEWORK_SKILLS="typescript-patterns database-patterns nextjs-patterns nestjs-patterns react-query-patterns fastapi-patterns"
+FRAMEWORK_SKILLS="typescript-patterns database-patterns nextjs-patterns nestjs-patterns fastapi-patterns"
 
 # Quality skills — always copied
 QUALITY_SKILLS="error-handling-patterns form-validation-patterns"
@@ -226,6 +282,10 @@ if [[ "$INCLUDE_CHROME_EXT" == true ]]; then
 fi
 if [[ "$INCLUDE_AI" == true ]]; then
   ALL_SKILLS="$ALL_SKILLS prompt-engineering rag-architecture"
+fi
+
+if [[ "$CONVENTION_PRESET" == "feature-saas-react-query-zustand" ]]; then
+  ALL_SKILLS="$ALL_SKILLS react-query-patterns"
 fi
 
 cp "$TEMPLATE_DIR/.claude/skills/MANIFEST.md" "$PROJECT_PATH/.claude/skills/MANIFEST.md"
@@ -244,6 +304,10 @@ for skill in $ALL_SKILLS; do
   else
     echo "   ⚠️  Skill template not found: $skill.md (skipped)"
   fi
+done
+
+for skill_dir in shared archetypes patterns; do
+  copy_skill_directory "$skill_dir"
 done
 
 # Copy native agent files (YAML frontmatter format — auto-detected by Claude Code)
@@ -300,5 +364,6 @@ echo ""
 echo "Next steps:"
 echo "  1. Open Claude Code in: $PROJECT_PATH"
 echo "  2. Run: /agent-team setup   ← Claude scans codebase, auto-fills CLAUDE.md + product.md + tech-stack.md"
-echo "  3. Review the generated files and adjust anything incorrect"
-echo "  4. Run: /agent-team init \"Your first feature\""
+echo "  3. Review .claude/conductor/project-conventions.md and adjust any preset details"
+echo "  4. Review the generated files and adjust anything incorrect"
+echo "  5. Run: /agent-team init \"Your first feature\""

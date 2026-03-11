@@ -106,6 +106,14 @@ _[Any DB design decisions or trade-offs]_
 
 <!-- Backend Dev writes here after DB is complete -->
 
+### Convention Resolution
+
+- Archetype: _[resolved archetype or not-applicable]_
+- Required patterns: _[relevant patterns applied]_
+- Folder contract: _[backend-relevant locations]_
+- Forbidden patterns checked: _[summary]_
+- Overrides applied: _[none or list]_
+
 ### Endpoints
 
 | Method | Path | Auth | Description |
@@ -131,6 +139,14 @@ _[Key logic decisions, edge cases handled]_
 ## 🎨 Frontend Output — UI & Components
 
 <!-- Frontend Dev writes here after Backend is complete -->
+
+### Convention Resolution
+
+- Archetype: _[resolved archetype]_
+- Required patterns: _[relevant patterns applied]_
+- Folder contract: _[frontend-relevant locations]_
+- Forbidden patterns checked: _[summary]_
+- Overrides applied: _[none or list]_
 
 ### Pages / Routes
 
@@ -204,6 +220,14 @@ _[Message types between components]_
 
 <!-- Integrator writes here (fullstack-web only) -->
 
+### Convention Resolution
+
+- Archetype: _[resolved archetype]_
+- Required patterns: _[relevant patterns applied]_
+- Folder contract: _[integration-relevant locations]_
+- Forbidden patterns checked: _[summary]_
+- Overrides applied: _[none or list]_
+
 ### Integration Points
 
 _[Frontend ↔ Backend connection notes]_
@@ -217,6 +241,14 @@ _[Any mapping between API response and UI state]_
 ## 🔍 Code Review
 
 <!-- Code Reviewer writes here -->
+
+### Convention Resolution
+
+- Archetype reviewed: _[resolved archetype]_
+- Required patterns reviewed: _[relevant patterns applied]_
+- Folder contract checked: _[summary]_
+- Forbidden patterns checked: _[summary]_
+- Overrides honored: _[none or list]_
 
 ### Review Status: `pending`
 

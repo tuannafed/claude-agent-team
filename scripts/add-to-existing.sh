@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Usage: ./add-to-existing.sh <project-path> --type <team-type>
+# Usage: ./add-to-existing.sh <project-path> --type <team-type> [--convention-preset <preset>]
 # Adds agent team layer to an EXISTING project without overwriting code.
 
 TEMPLATE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/templates"
@@ -9,17 +9,19 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 PROJECT_PATH=""
 TEAM_TYPE="fullstack-web"
+CONVENTION_PRESET=""
 
 while [[ $# -gt 0 ]]; do
   case $1 in
     --type) TEAM_TYPE="$2"; shift 2 ;;
+    --convention-preset) CONVENTION_PRESET="$2"; shift 2 ;;
     -*) echo "Unknown flag: $1"; exit 1 ;;
     *) PROJECT_PATH="$1"; shift ;;
   esac
 done
 
 if [[ -z "$PROJECT_PATH" ]] || [[ ! -d "$PROJECT_PATH" ]]; then
-  echo "Usage: $0 <existing-project-path> --type <team-type>"
+  echo "Usage: $0 <existing-project-path> --type <team-type> [--convention-preset <preset>]"
   echo "Types: fullstack-web | api-only | ai-llm-app | chrome-extension"
   echo ""
   echo "Error: Project path must exist"
@@ -30,6 +32,7 @@ PROJECT_NAME="$(basename "$PROJECT_PATH")"
 
 echo "🔧 Adding agent team layer to existing project: $PROJECT_NAME"
 echo "   Type: $TEAM_TYPE"
+[[ -n "$CONVENTION_PRESET" ]] && echo "   Preset: $CONVENTION_PRESET"
 echo "   Path: $PROJECT_PATH"
 echo ""
 echo "⚠️  This will NOT modify existing source code."
@@ -39,7 +42,11 @@ read -p "Continue? [y/N] " confirm
 [[ "$confirm" =~ ^[Yy]$ ]] || { echo "Aborted."; exit 0; }
 
 # Delegate to init script — it already skips existing files
-"$SCRIPT_DIR/init-new-project.sh" "$PROJECT_PATH" --type "$TEAM_TYPE" --name "$PROJECT_NAME"
+INIT_ARGS=("$PROJECT_PATH" --type "$TEAM_TYPE" --name "$PROJECT_NAME")
+if [[ -n "$CONVENTION_PRESET" ]]; then
+  INIT_ARGS+=(--convention-preset "$CONVENTION_PRESET")
+fi
+"$SCRIPT_DIR/init-new-project.sh" "${INIT_ARGS[@]}"
 
 echo ""
 echo "📝 Generating tech-stack.md from existing codebase..."
@@ -79,5 +86,6 @@ echo ""
 echo "Next steps:"
 echo "  1. Open $PROJECT_PATH in Claude Code"
 echo "  2. Run: /agent-team setup   ← Claude scans codebase, auto-fills CLAUDE.md + product.md + tech-stack.md"
-echo "  3. Review the generated files and adjust anything incorrect"
-echo "  4. Create your first track: /agent-team init \"feature to work on\""
+echo "  3. Review .claude/conductor/project-conventions.md and tune conventions for this codebase"
+echo "  4. Review the generated files and adjust anything incorrect"
+echo "  5. Create your first track: /agent-team init \"feature to work on\""

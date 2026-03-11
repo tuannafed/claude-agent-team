@@ -2,6 +2,8 @@
 
 A framework for integrating structured AI agent team workflows into any project.
 Agents run natively in Claude Code via `.claude/agents/` — no manual prompt pasting needed.
+Projects can now declare neutral engineering conventions in `.claude/conductor/project-conventions.md`
+so agents follow the selected archetype, folder contract, and data/state patterns automatically.
 
 ## How It Works
 
@@ -32,10 +34,12 @@ Agents run natively in Claude Code via `.claude/agents/` — no manual prompt pa
 │   │   └── api-designer.md               │  model: sonnet
 │   ├── .claude/conductor/
 │   │   ├── product.md                    ← Product vision template
+│   │   ├── project-conventions.md        ← Neutral archetype + pattern selection
 │   │   ├── tech-stack.md                 ← Tech decisions template
 │   │   ├── workflow.md                   ← Team rules template
 │   │   ├── knowledge.md                  ← Accumulated lessons template
 │   │   └── track-template.md             ← Track file format
+│   ├── convention-presets/               ← Ready-to-copy neutral convention manifests
 │   ├── team-configs/                     ← Pipeline configs per team type
 │   ├── agent-prompts/                    ← Reference copies (plain markdown)
 │   └── commands/agent-team.md            ← /agent-team slash command
@@ -57,6 +61,7 @@ my-project/                               ← Your project
 │   └── commands/agent-team.md            ← /agent-team slash command
 └── .claude/conductor/
     ├── product.md
+    ├── project-conventions.md            ← Project-specific convention manifest
     ├── tech-stack.md
     ├── workflow.md
     ├── knowledge.md                      ← Lessons learned across tracks
@@ -76,7 +81,7 @@ my-project/                               ← Your project
 ./setup.sh
 source ~/.zshrc   # or ~/.bashrc
 
-agent-init    ~/Projects/my-app --type fullstack-web
+agent-init    ~/Projects/my-app --type fullstack-web --convention-preset feature-saas-react-query-zustand
 agent-add     ~/Projects/existing-app --type api-only
 agent-remove  ~/Projects/my-app
 agent-upgrade ~/Projects/my-app
@@ -108,7 +113,7 @@ agent-team resume track-001
 ### Or run scripts directly
 
 ```bash
-./scripts/init-new-project.sh    ~/Projects/my-app --type fullstack-web
+./scripts/init-new-project.sh    ~/Projects/my-app --type fullstack-web --convention-preset feature-saas-react-query-zustand
 ./scripts/add-to-existing.sh     ~/Projects/existing-app --type api-only
 ./scripts/remove-from-project.sh ~/Projects/my-app
 ./scripts/upgrade-project.sh     ~/Projects/my-app
@@ -120,7 +125,29 @@ agent-team resume track-001
 agent-upgrade ~/Projects/my-app                  # update agents, commands, skills to latest
 agent-upgrade ~/Projects/my-app --dry-run        # preview what would change
 agent-upgrade ~/Projects/my-app --type api-only  # override team type (auto-detected by default)
+agent-upgrade ~/Projects/my-app --convention-preset workspace-modular-rtk-query
 ```
+
+### Convention Presets
+
+The generated project convention manifest lives at `.claude/conductor/project-conventions.md`.
+It controls:
+
+- selected archetype
+- required patterns
+- forbidden patterns
+- folder contract
+- agent resolution rules
+- project-level overrides
+
+Built-in neutral presets:
+
+| Preset | Archetype | Data/state pattern |
+|--------|-----------|--------------------|
+| `feature-saas-react-query-zustand` | `nextjs-feature-saas` | React Query + Zustand |
+| `workspace-modular-rtk-query` | `nextjs-workspace-modular` | RTK Query |
+
+Agents read this manifest before frontend, backend, integration, and review work. They record a short `Convention Resolution` section in the active track before proposing implementation details.
 
 ### Remove flags
 
@@ -204,11 +231,13 @@ Track header (ID, status, phase, next step)
 ├── 🗄️ DB Output        ← Schema DDL, migrations, indexes
 ├── ⚙️ Backend Output   ← Module structure, business logic, files created
 ├── 🎨 Frontend Output  ← Routes, component tree, state management
-├── 🔗 Integrator       ← React Query hooks, API wiring, contract verification
+├── 🔗 Integrator       ← Selected data client wiring, API contract verification
 └── 🔍 Code Review      ← Issues by severity, approval status
 ```
 
 The **API Contract** is the key to parallel execution: once BA fills it in, DB Engineer and Frontend Developer can work simultaneously without depending on each other.
+
+The **Project Conventions** manifest is the key to convention-aware implementation: once selected, all downstream agents resolve the same archetype and pattern set before making code decisions.
 
 ---
 

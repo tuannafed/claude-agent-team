@@ -2,10 +2,30 @@
 
 Quick reference: which skills each agent reads.
 
-## Skill → Agent Matrix
+## Shared Skill Categories
+
+- Root skills: framework-agnostic or legacy compatibility skills copied into `.claude/skills/*.md`
+- `shared/`: workflow helpers that all convention-aware agents can read
+- `archetypes/`: neutral structural conventions for project shapes
+- `patterns/`: focused implementation patterns that vary per project
+
+## Convention-Aware Skills
+
+| Skill Path | BA | DB | NestJS | FastAPI | Frontend | Integrator | Reviewer |
+|-----------|----|----|--------|---------|----------|------------|----------|
+| `shared/convention-resolution.md` | | | ✅ | ✅ | ✅ | ✅ | ✅ |
+| `archetypes/nextjs-feature-saas.md` | | | | | ✅ | ✅ | ✅ |
+| `archetypes/nextjs-workspace-modular.md` | | | | | ✅ | ✅ | ✅ |
+| `patterns/feature-folder-architecture.md` | | | ✅ | ✅ | ✅ | ✅ | ✅ |
+| `patterns/react-query-zustand.md` | | | | | ✅ | ✅ | ✅ |
+| `patterns/rtk-query-standard.md` | | | | | ✅ | ✅ | ✅ |
+| `patterns/typed-api-client-standard.md` | | | ✅ | ✅ | ✅ | ✅ | ✅ |
+| `patterns/permission-aware-ui.md` | | | | | ✅ | ✅ | ✅ |
+
+## Core Skill → Agent Matrix
 
 | Skill | BA | DB | NestJS | FastAPI | Frontend | Integrator | Reviewer |
-|-------|----|----|--------|---------|----------|-----------|---------|
+|-------|----|----|--------|---------|----------|------------|----------|
 | `api-contract` | ✅ | | ✅ | ✅ | ✅ | ✅ | |
 | `security-baseline` | | | ✅ | ✅ | | | ✅ |
 | `testing-strategy` | | | ✅ | ✅ | ✅ | | ✅ |
@@ -15,7 +35,7 @@ Quick reference: which skills each agent reads.
 | `nestjs-patterns` | | | ✅ | | | | ✅ |
 | `fastapi-patterns` | | | | ✅ | | | ✅ |
 | `nextjs-patterns` | | | | | ✅ | ✅ | ✅ |
-| `react-query-patterns` | | | | | ✅ | ✅ | |
+| `react-query-patterns` | | | | | optional | optional | |
 | `error-handling-patterns` | | | ✅ | ✅ | | ✅ | ✅ |
 | `form-validation-patterns` | | | | | ✅ | | ✅ |
 
@@ -26,18 +46,10 @@ Quick reference: which skills each agent reads.
 | `chrome-extension-mv3` | Chrome extension projects | chrome-ext, code-reviewer |
 | `prompt-engineering` | AI/LLM projects | ai-engineer |
 | `rag-architecture` | RAG/chatbot projects | ai-engineer |
-| `accessibility-patterns` | Public-facing apps | frontend, code-reviewer |
 
-## Skill Tiers
+## Convention Presets
 
-**Core** (all projects):
-`git-workflow`, `security-baseline`, `testing-strategy`, `api-contract`
+- `feature-saas-react-query-zustand`
+- `workspace-modular-rtk-query`
 
-**Framework** (backend/frontend projects):
-`typescript-patterns`, `nestjs-patterns`, `fastapi-patterns`, `nextjs-patterns`, `react-query-patterns`, `database-patterns`
-
-**Quality** (all backend/frontend projects):
-`error-handling-patterns`, `form-validation-patterns`
-
-**Domain** (project-type specific):
-`chrome-extension-mv3`, `prompt-engineering`, `rag-architecture`, `accessibility-patterns`
+Each preset writes `.claude/conductor/project-conventions.md` and references neutral archetype/pattern skills. Local project overrides in that manifest take precedence over the preset defaults.

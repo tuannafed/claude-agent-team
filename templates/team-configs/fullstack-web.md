@@ -27,10 +27,10 @@ BA (spec + API contract)
 |-------|-------|-----------|-------|--------|
 | 1 | BA | `ba` | CLAUDE.md + product.md | Spec + **API Contract** |
 | 2a ⚡ | DB Engineer | `db` | BA spec | Schema, migrations, indexes |
-| 2b ⚡ | Frontend Dev | `frontend` | **API Contract** (not DB!) | Pages, components, mocks |
-| 3 | Backend Dev | `backend` | DB schema + API contract | REST APIs, business logic |
-| 4 | Integrator | `integration` | Frontend + Backend | Connected flow, real API |
-| 5 | Code Reviewer | `review` | All above | Issues list, approval |
+| 2b ⚡ | Frontend Dev | `frontend` | **API Contract** + `project-conventions.md` | Pages, components, convention resolution |
+| 3 | Backend Dev | `backend` | DB schema + API contract + `project-conventions.md` | REST APIs, business logic |
+| 4 | Integrator | `integration` | Frontend + Backend + `project-conventions.md` | Connected flow, real API |
+| 5 | Code Reviewer | `review` | All above + `project-conventions.md` | Issues list, approval |
 
 ⚡ = runs in parallel after BA completes
 
@@ -60,6 +60,7 @@ BA (spec + API contract)
 ## Quality Gates
 
 - BA output must have acceptance criteria before DB starts
+- `project-conventions.md` must be present before frontend/backend/integrator/reviewer work
 - DB schema must be reviewed by Backend Dev before implementation
 - API contract must be stable before Frontend starts
 - Integration must pass before Code Review

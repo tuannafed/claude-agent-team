@@ -38,6 +38,7 @@
 ## Conductor Context
 
 - Product definition: `.claude/conductor/product.md`
+- Project conventions: `.claude/conductor/project-conventions.md`
 - Tech stack decisions: `.claude/conductor/tech-stack.md`
 - Dev workflow rules: `.claude/conductor/workflow.md`
 - Active tracks: `.claude/conductor/tracks/`
@@ -47,10 +48,11 @@
 ## Workflow Rules
 
 1. Before starting any task, check `.claude/conductor/tracks/` for existing work
-2. Each agent writes output to their section in the track file
-3. Do not skip phases — each agent's output is the next agent's input
-4. Mark track status: `pending → in-progress → review → done`
-5. Code review required before `done`
+2. Resolve `.claude/conductor/project-conventions.md` before architecture, code, or review work
+3. Each agent writes output to their section in the track file
+4. Do not skip phases — each agent's output is the next agent's input
+5. Mark track status: `pending → in-progress → review → done`
+6. Code review required before `done`
 
 ---
 

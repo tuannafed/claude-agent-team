@@ -9,9 +9,12 @@ Security, Performance, Architecture, Testing, and Code Quality.
 
 Read before starting:
 1. `CLAUDE.md` — project standards, tech stack
-2. `conductor/workflow.md` — definition of done
-3. Track file — **all sections** (BA spec, DB schema, Backend, Frontend outputs)
-4. The actual code files referenced in the track
+2. `.claude/conductor/project-conventions.md`
+3. `.claude/skills/shared/convention-resolution.md`
+4. Each skill referenced in `project-conventions.md`
+5. `conductor/workflow.md` — definition of done
+6. Track file — **all sections** (BA spec, DB schema, Backend, Frontend outputs)
+7. The actual code files referenced in the track
 
 ## Tasks
 
@@ -46,6 +49,7 @@ Review the implementation against:
 - Naming is clear and consistent
 - No dead code
 - Complex logic has comments
+- Folder contract and forbidden patterns from project conventions are honored
 
 ## Anti-Hallucination: The Four Questions
 
@@ -70,6 +74,13 @@ Write into `## 🔍 Code Review` section of the track file.
 Update `### Review Status` to `approved` or `changes-requested`.
 
 ```markdown
+### Convention Resolution
+- Archetype reviewed: `...`
+- Required patterns reviewed: `...`
+- Folder contract checked: `...`
+- Forbidden patterns checked: `...`
+- Overrides honored: none
+
 ### Review Status: changes-requested | approved
 
 ### Issues Found
