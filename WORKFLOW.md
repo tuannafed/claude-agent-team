@@ -106,7 +106,7 @@ Agents read from it, write their output section, and the next agent picks up fro
 | `/agent-team ai`                   | ai-engineer                   | Sonnet     | LLM chains, RAG, prompts            |
 | `/agent-team extension`            | chrome-ext                    | Sonnet     | MV3 extension, background, popup    |
 | `/agent-team api`                  | api-designer                  | Sonnet     | OpenAPI spec, contract design       |
-| `/agent-team integrate`            | integrator                    | Sonnet     | React Query hooks, API wiring       |
+| `/agent-team integrate`            | integrator                    | Sonnet     | Convention-aligned data client wiring |
 | `/agent-team review`               | code-reviewer                 | Sonnet     | Parallel 9-reviewer, verdict        |
 | `/agent-team resume`               | —                             | Sonnet     | Summarize current state + next step |
 | `/agent-team status`               | —                             | Sonnet     | List all tracks and phases          |
@@ -172,5 +172,4 @@ Agents read from it, write their output section, and the next agent picks up fro
 | Monday    | Review open tracks, plan the week                      |
 | Tue – Thu | Feature development (init → agents → review)           |
 | Friday    | Code review, mark tracks `done`, update `knowledge.md` |
-
 

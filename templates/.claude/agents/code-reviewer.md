@@ -40,6 +40,9 @@ Which reviewers? [1-9 or Enter for all]:
 
 Before launching reviewers, read:
 - `CLAUDE.md` — project stack and conventions
+- `.claude/conductor/project-conventions.md` — archetype, required patterns, forbidden patterns, overrides
+- `.claude/skills/shared/convention-resolution.md` — convention resolution workflow
+- Each skill referenced in `.claude/conductor/project-conventions.md` under `## Required Patterns`
 - `.claude/conductor/tracks/<track-id>*.md` — full track (BA spec + all outputs)
 - The actual code files referenced in the track
 
@@ -119,6 +122,7 @@ Review for:
 - Naming: matches project patterns?
 - File organization: right place?
 - Consistency: matches surrounding code style?
+- Convention compliance: folder contract and required patterns honored?
 
 If clean: "No quality or style issues identified."
 
@@ -201,6 +205,13 @@ After all selected reviewers complete, produce a prioritized summary:
 ```markdown
 ## 🔍 Code Review — <track-id>
 
+### Convention Resolution
+- Archetype reviewed: `nextjs-feature-saas`
+- Required patterns reviewed: `feature-folder-architecture`, `typed-api-client-standard`, `react-query-zustand`
+- Folder contract checked: `src/features/...`, `src/lib/api/...`
+- Forbidden patterns checked: no route-owned business logic, no raw API calls in components
+- Overrides honored: none
+
 ### Needs Attention (<N> issues)
 1. [Security] <title> — file:line
    <brief description>
@@ -229,3 +240,4 @@ Tests (N passed), Linter (no issues), [other clean reviewers...]
 
 Write the full synthesis into `## 🔍 Code Review` section of the track file.
 Set `### Review Status` to `approved` (Ready to Merge) or `changes-requested` (Needs Attention / Needs Work).
+Convention violations from `project-conventions.md` should be treated as explicit findings, not background notes.

@@ -19,30 +19,34 @@ SQLAlchemy 2.0, and proper dependency injection.
 ## Input
 
 Read before starting:
-1. `CLAUDE.md` — project constraints, auth strategy
-2. `.claude/conductor/tech-stack.md` — existing routers, naming conventions
-3. `.claude/conductor/knowledge.md` — accumulated FastAPI lessons (if exists)
-4. Track file `## 📋 BA Output` — feature spec + acceptance criteria
-5. Track file `## 📐 API Contract` — endpoints and schemas (BA-defined, must match exactly)
-6. Track file `## 🗄️ DB Engineer Output` — schema, migrations
-7. `.claude/skills/api-contract.md` — REST conventions and response format
-8. `.claude/skills/security-baseline.md` — input validation, auth, injection prevention
-9. `.claude/skills/testing-strategy.md` — what to test and how
-10. `.claude/skills/git-workflow.md` — commit conventions
-11. `.claude/skills/fastapi-patterns.md` — project structure, Pydantic v2, dependency injection
-12. `.claude/skills/error-handling-patterns.md` — error codes, error envelope, logging
+1. `.claude/conductor/project-conventions.md` — selected archetype, required patterns, forbidden patterns, folder contract, overrides
+2. `.claude/skills/shared/convention-resolution.md` — how to resolve and record conventions
+3. Each skill referenced in `.claude/conductor/project-conventions.md` under `## Required Patterns`
+4. `CLAUDE.md` — project constraints, auth strategy
+5. `.claude/conductor/tech-stack.md` — existing routers, naming conventions
+6. `.claude/conductor/knowledge.md` — accumulated FastAPI lessons (if exists)
+7. Track file `## 📋 BA Output` — feature spec + acceptance criteria
+8. Track file `## 📐 API Contract` — endpoints and schemas (BA-defined, must match exactly)
+9. Track file `## 🗄️ DB Engineer Output` — schema, migrations
+10. `.claude/skills/api-contract.md` — REST conventions and response format
+11. `.claude/skills/security-baseline.md` — input validation, auth, injection prevention
+12. `.claude/skills/testing-strategy.md` — what to test and how
+13. `.claude/skills/git-workflow.md` — commit conventions
+14. `.claude/skills/fastapi-patterns.md` — project structure, Pydantic v2, dependency injection
+15. `.claude/skills/error-handling-patterns.md` — error codes, error envelope, logging
 
 > **Note:** API Contract is the source of truth for endpoint signatures.
 > Do NOT deviate — Frontend is already being built against it in parallel.
 
 ## Tasks
 
-1. **Define Pydantic schemas** — request/response models with validators
-2. **Define SQLAlchemy models** — mapped to the DB schema
-3. **Implement CRUD functions** — async with SQLAlchemy sessions
-4. **Implement router** — FastAPI endpoints with proper dependencies
-5. **Handle errors** — HTTPException with appropriate status codes
-6. **Write pytest tests** for route handlers
+1. **Resolve conventions first** — module root, typed client expectations, forbidden patterns, overrides
+2. **Define Pydantic schemas** — request/response models with validators
+3. **Define SQLAlchemy models** — mapped to the DB schema
+4. **Implement CRUD functions** — async with SQLAlchemy sessions
+5. **Implement router** — FastAPI endpoints with proper dependencies
+6. **Handle errors** — HTTPException with appropriate status codes
+7. **Write pytest tests** for route handlers
 
 ## Output Format
 
@@ -50,6 +54,13 @@ Write into `## ⚙️ Backend Output — API & Logic` section of the track file.
 Update: `## Current Phase` → `backend`, `## Next Step` → `Run /agent-team frontend <track-id>`
 
 ```markdown
+### Convention Resolution
+- Archetype: `not-applicable` or resolved project archetype
+- Required patterns: `typed-api-client-standard`, `feature-folder-architecture` as relevant
+- Folder contract: `app/...` or project override
+- Forbidden patterns checked: no contract drift, no route-level business logic
+- Overrides applied: none
+
 ### Project Structure
 ```
 app/
@@ -91,9 +102,11 @@ If you encountered gotchas or reusable patterns, append to `.claude/conductor/kn
 
 ## Rules
 
+- Resolve project conventions before proposing module layout or response contracts
 - All models use Pydantic v2 syntax (`model_config`, `Field(...)` with types)
 - Use `Annotated` for reusable field definitions
 - All DB operations must be `async` with `AsyncSession`
 - Use `Depends()` for auth (`get_current_user`) and DB sessions
 - Return types must match response model — no `dict` returns
 - Use `pytest-asyncio` for async test functions
+- Keep endpoint signatures and schema naming stable for the selected typed client convention

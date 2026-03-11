@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Usage: ./upgrade-project.sh [<project-path>] [--dry-run] [--type <team-type>]
+# Usage: ./upgrade-project.sh [<project-path>] [--dry-run] [--type <team-type>] [--convention-preset <preset>]
 #
 # Syncs the latest agent team templates into an existing project.
 # Safe to run anytime — only overwrites agent/command/skill files, never user content.
@@ -9,8 +9,9 @@ set -euo pipefail
 # What gets UPDATED (overwritten with latest templates):
 #   .claude/agents/*.md       — agent definitions (prompts improve over time)
 #   .claude/commands/*.md     — slash commands (new subcommands, fixes)
-#   .claude/skills/*.md       — skill files (MANIFEST.md + all present skills)
+#   .claude/skills/**/*.md    — skill files, including convention archetypes/patterns
 #   .claude/settings.json     — hooks config
+#   .claude/conductor/project-conventions.md — created only if missing
 #
 # What is NEVER touched:
 #   CLAUDE.md                        — user's project context
@@ -24,13 +25,15 @@ TEMPLATE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/templates"
 PROJECT_PATH=""
 DRY_RUN=false
 TEAM_TYPE=""
+CONVENTION_PRESET=""
 
 # ── Parse arguments ────────────────────────────────────────────────────────────
 while [[ $# -gt 0 ]]; do
   case $1 in
     --dry-run)     DRY_RUN=true; shift ;;
     --type)        TEAM_TYPE="$2"; shift 2 ;;
-    -*) echo "Unknown flag: $1"; echo "Usage: $(basename "${BASH_SOURCE[0]}") [<project-path>] [--type <team-type>] [--dry-run]"; exit 1 ;;
+    --convention-preset) CONVENTION_PRESET="$2"; shift 2 ;;
+    -*) echo "Unknown flag: $1"; echo "Usage: $(basename "${BASH_SOURCE[0]}") [<project-path>] [--type <team-type>] [--convention-preset <preset>] [--dry-run]"; exit 1 ;;
     *) PROJECT_PATH="$1"; shift ;;
   esac
 done
@@ -124,6 +127,17 @@ update_file() {
   (( UPDATED++ )) || true
 }
 
+default_convention_preset() {
+  case "$1" in
+    fullstack-web|ai-llm-app) echo "feature-saas-react-query-zustand" ;;
+    *) echo "" ;;
+  esac
+}
+
+if [[ -z "$CONVENTION_PRESET" ]]; then
+  CONVENTION_PRESET="$(default_convention_preset "$TEAM_TYPE")"
+fi
+
 # ── 1. Update agents ───────────────────────────────────────────────────────────
 echo "Updating agents..."
 mkdir -p "$DOTCLAUDE/agents"
@@ -162,7 +176,7 @@ for cmd in agent-team checkpoint learn; do
     ".claude/commands/$cmd.md"
 done
 
-# ── 3. Update skills (only those already present in the project) ───────────────
+# ── 3. Update skills ───────────────────────────────────────────────────────────
 echo ""
 echo "Updating skills..."
 mkdir -p "$DOTCLAUDE/skills"
@@ -185,6 +199,22 @@ if [[ -d "$DOTCLAUDE/skills" ]]; then
   done < <(find "$DOTCLAUDE/skills" -maxdepth 1 -name "*.md" -print0 2>/dev/null)
 fi
 
+for skill_dir in shared archetypes patterns; do
+  template_skill_dir="$TEMPLATE_DIR/.claude/skills/$skill_dir"
+  target_skill_dir="$DOTCLAUDE/skills/$skill_dir"
+
+  [[ -d "$template_skill_dir" ]] || continue
+
+  mkdir -p "$target_skill_dir"
+  while IFS= read -r -d '' template_skill; do
+    skill_name="$(basename "$template_skill")"
+    update_file \
+      "$template_skill" \
+      "$target_skill_dir/$skill_name" \
+      ".claude/skills/$skill_dir/$skill_name"
+  done < <(find "$template_skill_dir" -maxdepth 1 -name "*.md" -print0)
+done
+
 # ── 4. Update settings.json ────────────────────────────────────────────────────
 echo ""
 echo "Updating settings..."
@@ -195,6 +225,35 @@ if [[ -f "$DOTCLAUDE/settings.json" ]]; then
     ".claude/settings.json"
 else
   echo "   ⏭️  .claude/settings.json (not present, skipped)"
+fi
+
+echo ""
+echo "Checking project conventions..."
+PROJECT_CONVENTIONS="$DOTCLAUDE/conductor/project-conventions.md"
+mkdir -p "$DOTCLAUDE/conductor"
+
+if [[ -f "$PROJECT_CONVENTIONS" ]]; then
+  echo "   ⏭️  .claude/conductor/project-conventions.md (already exists)"
+else
+  PRESET_SRC="$TEMPLATE_DIR/convention-presets/$CONVENTION_PRESET.md"
+  SOURCE_CONVENTIONS="$TEMPLATE_DIR/.claude/conductor/project-conventions.md"
+
+  if [[ -n "$CONVENTION_PRESET" ]] && [[ -f "$PRESET_SRC" ]]; then
+    SOURCE_CONVENTIONS="$PRESET_SRC"
+  fi
+
+  if [[ "$DRY_RUN" == true ]]; then
+    echo "   would create: .claude/conductor/project-conventions.md"
+    (( UPDATED++ )) || true
+  else
+    cp "$SOURCE_CONVENTIONS" "$PROJECT_CONVENTIONS"
+    sed -i.bak "s/{{PROJECT_NAME}}/$PROJECT_NAME/g" "$PROJECT_CONVENTIONS"
+    sed -i.bak "s/{{TEAM_TYPE}}/$TEAM_TYPE/g" "$PROJECT_CONVENTIONS"
+    sed -i.bak "s/{{CONVENTION_PRESET}}/${CONVENTION_PRESET:-custom}/g" "$PROJECT_CONVENTIONS"
+    rm "$PROJECT_CONVENTIONS.bak"
+    echo "   ✅ .claude/conductor/project-conventions.md"
+    (( UPDATED++ )) || true
+  fi
 fi
 
 # ── Summary ────────────────────────────────────────────────────────────────────
@@ -208,6 +267,7 @@ echo ""
 echo "Not touched (your content is safe):"
 echo "  CLAUDE.md"
 echo "  .claude/conductor/product.md"
+echo "  .claude/conductor/project-conventions.md (if already present)"
 echo "  .claude/conductor/tech-stack.md"
 echo "  .claude/conductor/knowledge.md"
 echo "  .claude/conductor/tracks/"

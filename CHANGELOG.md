@@ -13,6 +13,32 @@ All improvements adopted from external repos, ordered chronologically.
 
 ---
 
+## [Feature] Neutral project conventions and preset-driven agent resolution (2026-03)
+
+- Added `.claude/conductor/project-conventions.md` as the per-project convention manifest.
+- Added neutral convention presets:
+  - `feature-saas-react-query-zustand`
+  - `workspace-modular-rtk-query`
+- Added convention skill taxonomy:
+  - `shared/`
+  - `archetypes/`
+  - `patterns/`
+- Added neutral convention skills:
+  - `feature-folder-architecture`
+  - `nextjs-feature-saas`
+  - `nextjs-workspace-modular`
+  - `react-query-zustand`
+  - `rtk-query-standard`
+  - `typed-api-client-standard`
+  - `permission-aware-ui`
+- Updated frontend, backend, integrator, and reviewer agents to:
+  - read `project-conventions.md`
+  - load referenced convention skills
+  - write `Convention Resolution` into the active track before continuing
+- Updated bootstrap and upgrade scripts to scaffold convention manifests and nested convention skills.
+
+---
+
 ## [Adopted from shanraisshan/claude-code-config]
 
 ### Agent Frontmatter Enhancements
@@ -131,5 +157,4 @@ Restructured `conductor/knowledge.md` with 5 clear sections:
 | `templates/conductor/knowledge.md`          | Restructured                             | SuperClaude             |
 | `scripts/init-new-project.sh`               | tracks.md + commands loop                | wshobson + ECC          |
 | `WORKFLOW.md`                               | Created (sequential + parallel diagrams) | Original                |
-
 

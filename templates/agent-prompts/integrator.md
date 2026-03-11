@@ -9,18 +9,22 @@ works end-to-end.
 ## Input
 
 Read before starting:
-1. Track file `## ⚙️ Backend Output` — API endpoints, request/response schemas
-2. Track file `## 🎨 Frontend Output` — components, data fetching plan
-3. Actual frontend and backend code files
+1. `.claude/conductor/project-conventions.md`
+2. `.claude/skills/shared/convention-resolution.md`
+3. Each skill referenced in `project-conventions.md`
+4. Track file `## ⚙️ Backend Output` — API endpoints, request/response schemas
+5. Track file `## 🎨 Frontend Output` — components, data fetching plan
+6. Actual frontend and backend code files
 
 ## Tasks
 
-1. **Verify API contract** — frontend calls match backend endpoint signatures
-2. **Set up API client** — axios/fetch wrapper, base URL, auth headers
-3. **Implement React Query hooks** — queries and mutations with proper keys
-4. **Map API response → UI state** — transform if needed (camelCase, date formats)
-5. **Handle error states** — API errors displayed in UI (toast/inline)
-6. **Test integration** — verify request/response in browser network tab
+1. **Resolve conventions first** — data/state pattern, typed client shape, folder contract, overrides
+2. **Verify API contract** — frontend calls match backend endpoint signatures
+3. **Set up API client** — typed client wrapper, base URL, auth headers
+4. **Implement the selected data integration layer** — React Query hooks or RTK Query slices per convention
+5. **Map API response → UI state** — transform if needed (camelCase, date formats)
+6. **Handle error states** — API errors displayed in UI (toast/inline)
+7. **Test integration** — verify request/response in browser network tab
 
 ## Output Format
 
@@ -28,22 +32,21 @@ Write into `## 🔗 Integrator Output` section of the track file.
 Update: `## Current Phase` → `integration`, `## Next Step` → `Run /agent-team review <track-id>`
 
 ```markdown
+### Convention Resolution
+- Archetype: `...`
+- Required patterns: `...`
+- Folder contract: `...`
+- Forbidden patterns checked: `...`
+- Overrides applied: none
+
 ### API Contract Verification
 - [ ] `POST /api/v1/feature` — request matches CreateFeatureDto ✅
 - [ ] Response `FeatureResponse` matches frontend interface ✅
 
-### React Query Hooks
+### Data Client Integration
 ```typescript
-// Query keys
-export const featureKeys = {
-  all: ['features'] as const,
-  list: () => [...featureKeys.all, 'list'] as const,
-  detail: (id: string) => [...featureKeys.all, 'detail', id] as const,
-}
-
-// Query hook
-export function useFeatures() {
-  return useQuery({ queryKey: featureKeys.list(), queryFn: fetchFeatures })
+export async function listFeatures() {
+  return apiClient.get<FeatureListResponse>('/features')
 }
 ```
 
@@ -61,6 +64,6 @@ export function useFeatures() {
 
 - Never `console.log` sensitive data
 - All API calls must include auth token from context
-- React Query mutation must invalidate relevant query keys on success
+- Use the selected convention for cache invalidation or endpoint tags
 - Loading and error states must be handled for all queries
 - Type the API response — do not use `any`

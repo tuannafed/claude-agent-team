@@ -4,10 +4,10 @@ set -euo pipefail
 # setup.sh — Install claude-agent-team globally
 #
 # Adds shell aliases so you can run from any directory:
-#   agent-init    <path> --type <type>   → init new project
+#   agent-init    <path> --type <type> [--convention-preset <preset>] → init new project
 #   agent-add     <path> --type <type>   → add to existing project
 #   agent-remove  <path>                 → remove agent team from project
-#   agent-upgrade <path>                 → sync latest templates into existing project
+#   agent-upgrade <path> [--convention-preset <preset>] → sync latest templates into existing project
 #
 # Usage:
 #   ./setup.sh              → install
@@ -110,13 +110,14 @@ EOF
   echo "  agent-init    <path> --type <fullstack-web|api-only|ai-llm-app|chrome-extension>"
   echo "  agent-add     <path> --type <fullstack-web|api-only|ai-llm-app|chrome-extension>"
   echo "  agent-remove  <path> [--keep-tracks] [--dry-run]"
-  echo "  agent-upgrade <path> [--type <team-type>] [--dry-run]"
+  echo "  agent-upgrade <path> [--type <team-type>] [--convention-preset <preset>] [--dry-run]"
   echo "  agent-team    <subcommand> [args]    (run from inside your project)"
   echo ""
   echo "Optional flags for agent-init:"
   echo "  --name <project-name>   override project name (default: dirname)"
   echo "  --chrome-ext            include Chrome Extension domain skills"
   echo "  --ai                    include AI/RAG domain skills"
+  echo "  --convention-preset     neutral preset (feature-saas-react-query-zustand | workspace-modular-rtk-query)"
   echo ""
   echo "Reload your shell:"
   echo "  source $rc_file"
@@ -132,10 +133,10 @@ case "${1:-}" in
     echo "  ./setup.sh --uninstall Remove aliases"
     echo ""
     echo "After install:"
-    echo "  agent-init    <path> --type <type>     Init new project"
+    echo "  agent-init    <path> --type <type> [--convention-preset <preset>]  Init new project"
     echo "  agent-add     <path> --type <type>     Add to existing project"
     echo "  agent-remove  <path> [--keep-tracks]  Remove from project"
-    echo "  agent-upgrade <path> [--dry-run]      Sync latest templates"
+    echo "  agent-upgrade <path> [--convention-preset <preset>] [--dry-run]  Sync latest templates"
     echo "  agent-team    <subcommand>            Run workflow from terminal"
     ;;
   "") install ;;

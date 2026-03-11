@@ -76,7 +76,7 @@ declare -a TO_REMOVE_LABELS=()
 if [[ -d "$DOTCLAUDE/conductor" ]]; then
   if [[ "$KEEP_TRACKS" == true ]]; then
     # Remove individual files but keep tracks/
-    for f in product.md tech-stack.md workflow.md knowledge.md tracks.md team-config.md checkpoints.log; do
+    for f in product.md project-conventions.md tech-stack.md workflow.md knowledge.md tracks.md team-config.md checkpoints.log; do
       fp="$DOTCLAUDE/conductor/$f"
       if [[ -f "$fp" ]]; then
         TO_REMOVE+=("$fp")
